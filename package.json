@@ -1,0 +1,18 @@
+{
+  "name": "knx-jordan-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KNX Jordan Club — public site deployed to Vercel with a Neon serverless Postgres backend.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy --prod",
+    "db:init": "psql \"$DATABASE_URL\" -f db/schema.sql"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.4"
+  }
+}
