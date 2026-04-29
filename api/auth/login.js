@@ -1,15 +1,15 @@
 import {
   getSql, verifyPassword, createSession, sessionCookie, json,
+  testAuthEnabled, TEST_CREDS, TEST_USER, TEST_TOKEN,
 } from '../_lib/auth.js';
 
 export const config = { runtime: 'edge' };
 
 const DUMMY_HASH = 'pbkdf2$100000$AAAAAAAAAAAAAAAAAAAAAA==$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
+const TEST_TTL_SEC = 60 * 60 * 24 * 14;
 
 export default async function handler(req) {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
-  const sql = getSql();
-  if (!sql) return json({ error: 'Database not configured' }, 500);
 
   let body;
   try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
@@ -17,6 +17,20 @@ export default async function handler(req) {
   const email = (body.email || '').toString().trim().toLowerCase().slice(0, 200);
   const password = (body.password || '').toString();
   if (!email || !password) return json({ error: 'Email and password are required' }, 400);
+
+  if (testAuthEnabled()) {
+    if (email === TEST_CREDS.email && password === TEST_CREDS.password) {
+      return json(
+        { ok: true, user: TEST_USER, testMode: true },
+        200,
+        { 'Set-Cookie': sessionCookie(TEST_TOKEN, TEST_TTL_SEC) }
+      );
+    }
+    return json({ error: 'Invalid email or password' }, 401);
+  }
+
+  const sql = getSql();
+  if (!sql) return json({ error: 'Database not configured' }, 500);
 
   const rows = await sql`
     SELECT id, email, role, full_name, password_hash

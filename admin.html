@@ -120,6 +120,12 @@
         </button>
         <div class="err" id="signin-error" role="alert"></div>
       </form>
+      <div id="test-hint" class="hidden mt-5 p-3 rounded-lg text-[12.5px]" style="background: rgba(50,156,50,.1); border:1px solid rgba(50,156,50,.3); color: var(--ink);">
+        <div class="font-semibold mb-1">Test mode is on</div>
+        <div>Email: <code class="font-mono">admin@test.com</code></div>
+        <div>Password: <code class="font-mono">test1234</code></div>
+        <button type="button" id="test-fill" class="mt-2 underline" style="color: var(--blue);">Fill these in</button>
+      </div>
     </div>
   </section>
 
@@ -211,10 +217,17 @@ function show(view) {
 
 async function fetchMe() {
   const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
-  if (!r.ok) return null;
-  const data = await r.json();
-  return data.user;
+  if (!r.ok) return { user: null, testMode: false };
+  return r.json();
 }
+
+function showTestHint(on) {
+  document.getElementById('test-hint').classList.toggle('hidden', !on);
+}
+document.getElementById('test-fill').addEventListener('click', () => {
+  document.getElementById('signin-email').value = 'admin@test.com';
+  document.getElementById('signin-password').value = 'test1234';
+});
 
 function renderUser(user) {
   document.getElementById('hello-name').textContent  = user.full_name || user.email;
@@ -317,7 +330,8 @@ document.getElementById('signout-btn').addEventListener('click', async () => {
 });
 
 (async function init() {
-  const user = await fetchMe();
+  const { user, testMode } = await fetchMe();
+  showTestHint(!!testMode);
   if (user) {
     renderUser(user);
     show('dashboard');

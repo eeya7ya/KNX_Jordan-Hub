@@ -99,11 +99,23 @@ export function getSql() {
   return neon(process.env.DATABASE_URL);
 }
 
+// --- Test mode (no DB required) ---
+// Enable by setting TEST_AUTH=1 in the environment, OR automatically when
+// DATABASE_URL is not set. Sign in with TEST_CREDS to get an admin session.
+export const TEST_TOKEN = 'test-mode-session';
+export const TEST_CREDS = { email: 'admin@test.com', password: 'test1234' };
+export const TEST_USER  = { id: 0, email: TEST_CREDS.email, role: 'admin', full_name: 'Test Admin' };
+
+export function testAuthEnabled() {
+  return process.env.TEST_AUTH === '1' || !process.env.DATABASE_URL;
+}
+
 export async function getCurrentUser(req) {
-  const sql = getSql();
-  if (!sql) return null;
   const token = parseCookies(req)[SESSION_COOKIE];
   if (!token) return null;
+  if (testAuthEnabled() && token === TEST_TOKEN) return TEST_USER;
+  const sql = getSql();
+  if (!sql) return null;
   const tokenHash = await hashSessionToken(token);
   const rows = await sql`
     SELECT u.id, u.email, u.role, u.full_name
