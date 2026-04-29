@@ -87,6 +87,9 @@
 
   /* Field */
   .field { width:100%; padding:12px 14px; border:1px solid var(--line-2); border-radius:10px; background:var(--bg); font-size:14px; color:var(--ink); transition: border .15s ease, box-shadow .15s ease; }
+  /* Directory search: icon on the trailing edge, padded so text doesn't overlap */
+  .dir-search-wrap #dir-search { padding-inline-end: 36px; }
+  .dir-search-ico { position:absolute; top:50%; transform: translateY(-50%); inset-inline-end: 12px; pointer-events:none; }
   .field:focus { outline:none; border-color:#0060A8; box-shadow: 0 0 0 3px rgba(0,96,168,.15); }
 
   /* Eyebrow + lifts */
@@ -374,7 +377,6 @@
       <a href="#top" class="flex items-center gap-3">
         <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto" />
         <span class="font-display font-bold text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
-        <span class="hidden xl:inline whitespace-nowrap text-[11px] text-knx-gray-600 border-l border-knx-gray-200 ps-3 ms-1 i18n" data-en="AMMAN · EST. 2014" data-ar="عمّان · تأسّس 2014">AMMAN · EST. 2014</span>
       </a>
       <div class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-knx-gray-800">
         <a href="#about" class="hover:text-knx-blue i18n" data-en="About" data-ar="من نحن">About</a>
@@ -632,9 +634,9 @@
         <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="Member directory" data-ar="دليل الأعضاء">Member directory</span></div>
         <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="A searchable network of verified specialists." data-ar="شبكة قابلة للبحث من المختصين الموثّقين.">A searchable network of verified specialists.</h2>
       </div>
-      <div class="relative">
-        <input id="dir-search" placeholder="Search…" class="field !w-72" />
-        <svg class="absolute right-3 top-1/2 -translate-y-1/2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A0A0A0" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <div class="relative dir-search-wrap">
+        <input id="dir-search" placeholder="Search…" data-en-ph="Search…" data-ar-ph="بحث…" class="field !w-72" />
+        <svg class="dir-search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A0A0A0" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </div>
     </div>
     <div id="directory-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -897,6 +899,11 @@ function applyTweaks(t) {
     if (html) el.innerHTML = html;
     else if (text) el.textContent = text;
   });
+  // Localize input placeholders
+  document.querySelectorAll('[data-' + t.lang + '-ph]').forEach(el => {
+    const ph = el.getAttribute('data-' + t.lang + '-ph');
+    if (ph) el.setAttribute('placeholder', ph);
+  });
 
   // Update segment buttons
   document.querySelectorAll('.twk-seg').forEach(seg => {
@@ -1002,11 +1009,10 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   let dx = tx, dy = ty, rx = tx, ry = ty;
   let raf = null;
   function loop(){
-    // dot snaps fast, ring trails softly
-    dx += (tx - dx) * 0.42;
-    dy += (ty - dy) * 0.42;
-    rx += (tx - rx) * 0.18;
-    ry += (ty - ry) * 0.18;
+    // dot snaps directly to cursor; ring trails softly
+    dx = tx; dy = ty;
+    rx += (tx - rx) * 0.22;
+    ry += (ty - ry) * 0.22;
     dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
     ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
     spot.style.setProperty('--cx', tx + 'px');
