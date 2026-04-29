@@ -34,7 +34,29 @@
     --grid: rgba(255,255,255,0.06); --grain:.06;
   }
   html { scroll-behavior:smooth; }
-  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); transition: background .35s ease, color .35s ease; }
+  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); transition: color .35s ease; position:relative; }
+  /* Atmospheric colorful background — replaces the flat solid fill */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 12% 8%,  rgba(50,156,50,0.18), transparent 70%),
+      radial-gradient(55% 55% at 92% 18%, rgba(0,96,168,0.20),  transparent 72%),
+      radial-gradient(70% 60% at 80% 92%, rgba(124,212,135,0.16), transparent 75%),
+      radial-gradient(55% 55% at 8% 88%,  rgba(127,182,230,0.18), transparent 72%),
+      linear-gradient(180deg, #FAFCFB 0%, #F2F6FA 55%, #EFF5F1 100%);
+    transition: background .5s ease;
+  }
+  html[data-theme="dark"] body::before {
+    background:
+      radial-gradient(55% 50% at 14% 10%, rgba(0,96,168,0.30),  transparent 72%),
+      radial-gradient(50% 55% at 88% 18%, rgba(50,156,50,0.22), transparent 75%),
+      radial-gradient(70% 65% at 82% 92%, rgba(0,96,168,0.22),  transparent 78%),
+      radial-gradient(60% 55% at 10% 88%, rgba(50,156,50,0.18), transparent 78%),
+      linear-gradient(180deg, #060A12 0%, #0A0F1A 50%, #07111A 100%);
+  }
+  /* Soft animated drift on the colored layer for liveliness */
+  @keyframes bgDrift { 0%,100%{transform:translate3d(0,0,0);} 50%{transform:translate3d(-1.5%, 1%, 0);} }
+  body::before { animation: bgDrift calc(38s / var(--motion)) ease-in-out infinite; }
   body[data-lang="ar"] { font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif; }
   .font-display { font-family:'Sora',system-ui,sans-serif; letter-spacing:-.01em; }
   body[data-lang="ar"] .font-display { font-family:'IBM Plex Sans Arabic','Sora',system-ui,sans-serif; }
@@ -371,7 +393,6 @@
       </a>
       <div class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-knx-gray-800">
         <a href="#about" class="hover:text-knx-blue i18n" data-en="About" data-ar="من نحن">About</a>
-        <a href="#membership" class="hover:text-knx-blue i18n" data-en="Membership" data-ar="العضوية">Membership</a>
         <a href="#directory" class="hover:text-knx-blue i18n" data-en="Directory" data-ar="الدليل">Directory</a>
         <a href="#events" class="hover:text-knx-blue i18n" data-en="Events" data-ar="الفعاليات">Events</a>
         <a href="#news" class="hover:text-knx-blue i18n" data-en="News" data-ar="الأخبار">News</a>
@@ -386,7 +407,6 @@
           <span class="nav-toggle-ico" data-show-when="en">ع</span>
           <span class="nav-toggle-ico" data-show-when="ar">EN</span>
         </button>
-        <a href="admin.html" class="hidden sm:inline text-[12.5px] font-medium text-knx-gray-600 hover:text-knx-blue px-3 py-2 i18n" data-en="Member sign-in" data-ar="دخول الأعضاء">Member sign-in</a>
         <a href="#contact" class="btn-apply">
           <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
           <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -422,7 +442,7 @@
           An independent, member-led society headquartered in Amman — connecting Jordan&rsquo;s integrators, consultants and educators who design and commission KNX systems for the region&rsquo;s homes, offices and public buildings.
         </p>
         <div class="mt-9 flex flex-wrap items-center gap-3">
-          <a href="#membership" class="btn btn-primary">
+          <a href="#contact" class="btn btn-primary">
             <span class="i18n" data-en="Become a member" data-ar="انضم إلى النادي">Become a member</span>
             <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
@@ -430,7 +450,7 @@
         </div>
       </div>
 
-      <!-- Right: floating credential card -->
+      <!-- Right: featured event card (admin-managed via /admin) -->
       <div class="lg:col-span-5 lg:mt-20">
         <div class="relative cred-wrap" id="cred-wrap">
           <div class="absolute -inset-6 bg-gradient-to-br from-knx-green/10 via-transparent to-knx-blue/10 rounded-3xl blur-3xl"></div>
@@ -439,30 +459,34 @@
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2 text-[11px] uppercase tracking-widest text-knx-gray-600">
                 <span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span>
-                <span class="i18n" data-en="Verified credential" data-ar="شهادة موثّقة">Verified credential</span>
+                <span class="i18n" data-en="Featured event" data-ar="فعالية مميّزة">Featured event</span>
               </div>
+              <span class="text-[10.5px] font-mono text-knx-gray-600 i18n" data-en="Next up" data-ar="التالية">Next up</span>
             </div>
             <div class="mt-6 flex items-center gap-4">
-              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-knx-green to-knx-blue flex items-center justify-center text-white font-display font-bold text-xl shadow-lg" style="transform: translateZ(20px);">MA</div>
-              <div>
-                <div class="font-display font-semibold text-[17px] i18n" data-en="Marwa Al-Habashneh" data-ar="مروة الحباشنة">Marwa Al-Habashneh</div>
-                <div class="text-[12.5px] text-knx-gray-600 i18n" data-en="KNX Tutor · Amman · Senior Integrator" data-ar="مدرّبة معتمدة · عمّان · مكاملة أنظمة">KNX Tutor · Amman · Senior Integrator</div>
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-knx-green to-knx-blue flex flex-col items-center justify-center text-white shadow-lg" style="transform: translateZ(20px);">
+                <span class="text-[10px] font-semibold tracking-widest uppercase opacity-90" id="evt-month">MAY</span>
+                <span class="font-display font-bold text-xl leading-none" id="evt-day">24</span>
+              </div>
+              <div class="min-w-0">
+                <div class="font-display font-semibold text-[17px] truncate" id="evt-title">KNX Advanced · IP-Secure Commissioning</div>
+                <div class="text-[12.5px] text-knx-gray-600 truncate" id="evt-date">24 May 2026 · 10:00 AGT</div>
               </div>
             </div>
             <div class="mt-6 grid grid-cols-2 gap-3 text-[12px]">
-              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Tier" data-ar="الفئة">Tier</div><div class="font-semibold mt-1 i18n" data-en="Professional" data-ar="محترف">Professional</div></div>
-              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Since" data-ar="منذ">Since</div><div class="font-semibold mt-1 i18n" data-en="Mar 2024" data-ar="مارس 2024">Mar 2024</div></div>
-              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Projects" data-ar="المشاريع">Projects</div><div class="font-semibold mt-1 i18n" data-en="87 commissioned" data-ar="87 مُسلّماً">87 commissioned</div></div>
-              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Status" data-ar="الحالة">Status</div><div class="font-semibold mt-1 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span> <span class="i18n" data-en="Active" data-ar="نشط">Active</span></div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Location" data-ar="الموقع">Location</div><div class="font-semibold mt-1" id="evt-location">Amman · Royal Cultural Centre</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Format" data-ar="الصيغة">Format</div><div class="font-semibold mt-1" id="evt-format">Workshop · ETS6 lab</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Capacity" data-ar="السعة">Capacity</div><div class="font-semibold mt-1" id="evt-capacity">32 seats</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Status" data-ar="الحالة">Status</div><div class="font-semibold mt-1 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span> <span id="evt-status">Registration open</span></div></div>
             </div>
             <div class="mt-5 pt-4 cred-footer flex items-center justify-between">
-              <span class="text-[10.5px] font-mono text-knx-gray-600 i18n" data-en="Valid · 31 Dec 2026" data-ar="ساري · 31 ديسمبر 2026">Valid · 31 Dec 2026</span>
+              <a href="#events" class="text-[11px] font-semibold text-knx-blue hover:underline i18n" data-en="See full calendar →" data-ar="عرض الجدول الكامل →">See full calendar →</a>
               <div class="flex items-center gap-2"><img src="assets/knx-logo.png" alt="KNX" class="h-4 w-auto" /><span class="font-display font-bold text-[12px] tracking-tight text-knx-gray-600 i18n" data-en="/ Jordan Club" data-ar="/ نادي الأردن">/ Jordan Club</span></div>
             </div>
           </div>
 
-          <div class="absolute -left-5 -bottom-5 cred-pill hidden md:flex items-center gap-3"><div class="w-9 h-9 rounded-md bg-knx-green-50 flex items-center justify-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#329C32" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="text-[12px] font-semibold i18n" data-en="ETS6 certified" data-ar="معتمد ETS6">ETS6 certified</div><div class="text-[10.5px] text-knx-gray-600 i18n" data-en="Renewed 12 days ago" data-ar="جُدّد قبل 12 يوماً">Renewed 12 days ago</div></div></div>
-          <div class="absolute -right-3 -top-5 cred-pill hidden md:block"><div class="text-[10.5px] uppercase tracking-widest text-knx-gray-600 i18n" data-en="Live" data-ar="مباشر">Live</div><div class="text-[13px] font-display font-semibold i18n" data-en="7 events this month" data-ar="7 فعاليات هذا الشهر">7 events this month</div></div>
+          <div class="absolute -left-5 -bottom-5 cred-pill hidden md:flex items-center gap-3"><div class="w-9 h-9 rounded-md bg-knx-blue-50 flex items-center justify-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0060A8" stroke-width="2.2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg></div><div><div class="text-[12px] font-semibold i18n" data-en="Reserve a seat" data-ar="احجز مقعدك">Reserve a seat</div><div class="text-[10.5px] text-knx-gray-600 i18n" data-en="Members get 30% off" data-ar="خصم 30٪ للأعضاء">Members get 30% off</div></div></div>
+          <div class="absolute -right-3 -top-5 cred-pill hidden md:block"><div class="text-[10.5px] uppercase tracking-widest text-knx-gray-600 i18n" data-en="Live" data-ar="مباشر">Live</div><div class="text-[13px] font-display font-semibold"><span id="evt-count">7</span> <span class="i18n" data-en="events this month" data-ar="فعاليات هذا الشهر">events this month</span></div></div>
         </div>
       </div>
     </div>
@@ -505,8 +529,29 @@
   <div class="relative mt-24 border-y" style="border-color:var(--line-2); background:var(--bg-alt);">
     <div class="overflow-hidden py-5">
       <div class="marquee-track flex items-center gap-12 whitespace-nowrap text-[13px] uppercase tracking-[0.18em] font-medium" style="width: max-content; color: var(--ink-2);">
-        <span>Helios Integrations · Amman</span><span class="text-knx-green">●</span><span>Royal Smart Homes</span><span class="text-knx-blue">●</span><span>Amman Automation Co.</span><span class="text-knx-green">●</span><span>Meridian Controls JO</span><span class="text-knx-blue">●</span><span>Petra Engineering</span><span class="text-knx-green">●</span><span>Aqaba Smart Buildings</span><span class="text-knx-blue">●</span><span>Lumen JO</span><span class="text-knx-green">●</span><span>Irbid Integrators</span><span class="text-knx-blue">●</span><span>Cobalt Labs MENA</span><span class="text-knx-green">●</span>
-        <span>Helios Integrations · Amman</span><span class="text-knx-green">●</span><span>Royal Smart Homes</span><span class="text-knx-blue">●</span><span>Amman Automation Co.</span><span class="text-knx-green">●</span><span>Meridian Controls JO</span><span class="text-knx-blue">●</span><span>Petra Engineering</span><span class="text-knx-green">●</span><span>Aqaba Smart Buildings</span><span class="text-knx-blue">●</span><span>Lumen JO</span><span class="text-knx-green">●</span><span>Irbid Integrators</span><span class="text-knx-blue">●</span><span>Cobalt Labs MENA</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="KNX Association · Brussels · est. 1990" data-ar="جمعية KNX · بروكسل · تأسست 1990">KNX Association · Brussels · est. 1990</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="ISO/IEC 14543-3 open standard" data-ar="معيار مفتوح ISO/IEC 14543-3">ISO/IEC 14543-3 open standard</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="500+ member manufacturers" data-ar="أكثر من 500 شركة عضو">500+ member manufacturers</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="8000+ certified products" data-ar="أكثر من 8000 منتج معتمد">8000+ certified products</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="Royalty-free protocol" data-ar="بروتوكول بدون رسوم ترخيص">Royalty-free protocol</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="ETS6 commissioning suite" data-ar="منظومة ETS6 للتسليم">ETS6 commissioning suite</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="TP · IP · RF · PL media" data-ar="وسائط TP · IP · RF · PL">TP · IP · RF · PL media</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="500+ accredited training centres worldwide" data-ar="أكثر من 500 مركز تدريب معتمد عالمياً">500+ accredited training centres worldwide</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="Vendor-interoperable by design" data-ar="قابلية تشغيل بيني بين المورّدين">Vendor-interoperable by design</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="KNX Secure (KNX/IP Secure · KNX Data Secure)" data-ar="KNX Secure (IP وآمن البيانات)">KNX Secure (KNX/IP Secure · KNX Data Secure)</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="190+ countries deployed" data-ar="منشور في أكثر من 190 دولة">190+ countries deployed</span><span class="text-knx-green">●</span>
+
+        <span class="i18n" data-en="KNX Association · Brussels · est. 1990" data-ar="جمعية KNX · بروكسل · تأسست 1990">KNX Association · Brussels · est. 1990</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="ISO/IEC 14543-3 open standard" data-ar="معيار مفتوح ISO/IEC 14543-3">ISO/IEC 14543-3 open standard</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="500+ member manufacturers" data-ar="أكثر من 500 شركة عضو">500+ member manufacturers</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="8000+ certified products" data-ar="أكثر من 8000 منتج معتمد">8000+ certified products</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="Royalty-free protocol" data-ar="بروتوكول بدون رسوم ترخيص">Royalty-free protocol</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="ETS6 commissioning suite" data-ar="منظومة ETS6 للتسليم">ETS6 commissioning suite</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="TP · IP · RF · PL media" data-ar="وسائط TP · IP · RF · PL">TP · IP · RF · PL media</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="500+ accredited training centres worldwide" data-ar="أكثر من 500 مركز تدريب معتمد عالمياً">500+ accredited training centres worldwide</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="Vendor-interoperable by design" data-ar="قابلية تشغيل بيني بين المورّدين">Vendor-interoperable by design</span><span class="text-knx-green">●</span>
+        <span class="i18n" data-en="KNX Secure (KNX/IP Secure · KNX Data Secure)" data-ar="KNX Secure (IP وآمن البيانات)">KNX Secure (KNX/IP Secure · KNX Data Secure)</span><span class="text-knx-blue">●</span>
+        <span class="i18n" data-en="190+ countries deployed" data-ar="منشور في أكثر من 190 دولة">190+ countries deployed</span><span class="text-knx-green">●</span>
       </div>
     </div>
   </div>
@@ -556,66 +601,6 @@
   </div>
 </section>
 
-<!-- MEMBERSHIP TIERS -->
-<section id="membership" class="py-28 bg-knx-gray-50 relative">
-  <div class="absolute inset-0 grid-pattern opacity-50 pointer-events-none"></div>
-  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 reveal">
-      <div>
-        <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="Membership tiers" data-ar="فئات العضوية">Membership tiers</span></div>
-        <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="Five tiers. One ladder." data-ar="خمس فئات. سلّمٌ واحد.">Five tiers. One ladder.</h2>
-        <p class="mt-4 text-[16px] text-knx-gray-600 max-w-xl i18n" data-en="We&rsquo;re a non-profit — there are no membership fees. You move up by submitting commissioned work and passing peer review. What changes between tiers is what you can vote on, teach, and certify." data-ar="نحن جمعيّة غير ربحية — لا توجد رسوم عضوية. ترتقي بإرسال أعمالك المُسلّمة واجتيازك مراجعة الأقران. ما يتغيّر بين الفئات هو ما يمكنك التصويت عليه وتدريسه ومنح شهاداته.">We&rsquo;re a non-profit — there are no membership fees. You move up by submitting commissioned work and passing peer review. What changes between tiers is what you can vote on, teach, and certify.</p>
-      </div>
-      <div class="flex items-center gap-2 text-[11.5px] uppercase tracking-[0.16em] text-knx-green font-semibold" style="display:none;">
-        <span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span>
-        <span class="i18n" data-en="Volunteer-run · No fees" data-ar="تطوّعي · بلا رسوم">Volunteer-run · No fees</span>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
-        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 01</div>
-        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Apprentice" data-ar="متدرّب">Apprentice</h3>
-        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="For students and trainees enrolled at a recognised KNX training centre." data-ar="للطلاب والمتدرّبين في مراكز تدريب KNX المعتمدة.">For students and trainees enrolled at a recognised KNX training centre.</p>
-        <div class="mt-6 pt-6 border-t border-knx-gray-200">
-          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
-          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="Active enrolment letter" data-ar="إفادة التسجيل الفعّال">Active enrolment letter</div>
-        </div>
-        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
-      </div>
-      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
-        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 02</div>
-        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Practitioner" data-ar="ممارس">Practitioner</h3>
-        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Working integrators with at least one commissioned project on record." data-ar="مكاملو أنظمة عاملون لديهم مشروع مُسلّم واحد على الأقل.">Working integrators with at least one commissioned project on record.</p>
-        <div class="mt-6 pt-6 border-t border-knx-gray-200">
-          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
-          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="1 commissioned project" data-ar="مشروع مُسلّم واحد">1 commissioned project</div>
-        </div>
-        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
-      </div>
-      <div class="rounded-2xl bg-white border-2 border-knx-blue p-6 lift flex flex-col h-full tier-popular relative">
-        <span class="absolute -top-3 left-6 bg-knx-blue text-white text-[10.5px] font-semibold tracking-wider uppercase px-2.5 py-1 rounded i18n" data-en="Most members" data-ar="الأكثر شيوعاً">Most members</span>
-        <div class="text-[11px] uppercase tracking-widest text-knx-blue">Tier 03</div>
-        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Professional" data-ar="محترف">Professional</h3>
-        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Senior integrators and system designers with five or more references." data-ar="مكاملون ومصممون كبار لديهم خمس مراجع أو أكثر.">Senior integrators and system designers with five or more references.</p>
-        <div class="mt-6 pt-6 border-t border-knx-blue/25">
-          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-blue i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
-          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="5+ references · peer review" data-ar="5+ مراجع · مراجعة أقران">5+ references · peer review</div>
-        </div>
-        <a href="#contact" class="btn btn-primary mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
-      </div>
-      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
-        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 04 / 05</div>
-        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Tutor &amp; Fellow" data-ar="مدرّب وزميل">Tutor &amp; Fellow</h3>
-        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Educators, examiners, and elected fellows. Promotion is by board nomination only." data-ar="معلّمون وممتحنون وزملاء منتخبون. الترقية بترشيح المجلس فقط.">Educators, examiners, and elected fellows. Promotion is by board nomination only.</p>
-        <div class="mt-6 pt-6 border-t border-knx-gray-200">
-          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
-          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="Board nomination" data-ar="ترشيح المجلس">Board nomination</div>
-        </div>
-        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Nominate" data-ar="رشّح">Nominate</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- DIRECTORY -->
 <section id="directory" class="py-28">
@@ -773,7 +758,7 @@
         <ul class="space-y-2 text-[14px] text-white/80"><li><a href="#about" class="i18n" data-en="About" data-ar="من نحن">About</a></li><li><a class="i18n" data-en="Bylaws" data-ar="النظام">Bylaws</a></li><li><a class="i18n" data-en="Board" data-ar="المجلس">Board</a></li></ul>
       </div>
       <div><div class="text-[11.5px] uppercase tracking-widest text-white/50 mb-4 i18n" data-en="Members" data-ar="الأعضاء">Members</div>
-        <ul class="space-y-2 text-[14px] text-white/80"><li><a href="#directory" class="i18n" data-en="Directory" data-ar="الدليل">Directory</a></li><li><a href="#events" class="i18n" data-en="Events" data-ar="الفعاليات">Events</a></li><li><a href="admin.html" class="i18n" data-en="Member portal" data-ar="بوابة الأعضاء">Member portal</a></li></ul>
+        <ul class="space-y-2 text-[14px] text-white/80"><li><a href="#directory" class="i18n" data-en="Directory" data-ar="الدليل">Directory</a></li><li><a href="#events" class="i18n" data-en="Events" data-ar="الفعاليات">Events</a></li><li><a href="#news" class="i18n" data-en="News" data-ar="الأخبار">News</a></li></ul>
       </div>
       <div><div class="text-[11.5px] uppercase tracking-widest text-white/50 mb-4 i18n" data-en="Contact" data-ar="تواصل">Contact</div>
         <ul class="space-y-2 text-[14px] text-white/80"><li class="font-mono">membership@knxjordan.org</li><li class="i18n" data-en="Amman · Jordan" data-ar="عمّان · الأردن">Amman · Jordan</li></ul>
@@ -1182,6 +1167,28 @@ fetch('/api/members').then(r => r.ok ? r.json() : null).then(rows => {
   rows.forEach(r => MEMBERS.push(r));
   renderDir();
 }).catch(() => {});
+
+/* === Hydrate the featured event card from /api/site/settings === */
+(function(){
+  const setText = (id, v) => { const el = document.getElementById(id); if (el && v != null && v !== '') el.textContent = v; };
+  function applyEvent(s){
+    if (!s) return;
+    setText('evt-title',    s.event_title);
+    setText('evt-date',     s.event_date);
+    setText('evt-location', s.event_location);
+    setText('evt-format',   s.event_format);
+    setText('evt-capacity', s.event_capacity);
+    setText('evt-status',   s.event_status);
+    setText('evt-count',    s.event_count_month);
+    // Try to derive a date badge (DAY / MONTH) from event_date if it starts with "DD MMM"
+    const m = String(s.event_date || '').match(/^\s*(\d{1,2})\s+([A-Za-z؀-ۿ]+)/);
+    if (m) {
+      setText('evt-day', m[1]);
+      setText('evt-month', m[2].slice(0,3).toUpperCase());
+    }
+  }
+  fetch('/api/site/settings').then(r => r.ok ? r.json() : null).then(d => applyEvent(d && d.settings)).catch(()=>{});
+})();
 
 /* Directory search filter */
 (function(){

@@ -54,6 +54,13 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE INDEX IF NOT EXISTS sessions_user_idx    ON sessions (user_id);
 CREATE INDEX IF NOT EXISTS sessions_expires_idx ON sessions (expires_at);
 
+-- Editable site content driven from /admin (event card on the homepage, etc.)
+CREATE TABLE IF NOT EXISTS site_settings (
+  key         TEXT PRIMARY KEY,
+  value       TEXT,
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- Seed the directory so /api/members has data on first deploy.
 INSERT INTO members (name, name_ar, tier, firm, city, city_ar, specialty, specialty_ar, since, color) VALUES
   ('Marwa Al-Habashneh', 'مروة الحباشنة', 'Tutor',        'Royal Smart Homes',          'Amman',  'عمّان',   'HVAC · Multi-zone',         'تكييف · مناطق متعدّدة', 2019, '#0060A8'),
