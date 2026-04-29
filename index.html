@@ -89,6 +89,41 @@
   /* News card top blocks: switch out faded gradients in dark */
   html[data-theme="dark"] .news-block { background: linear-gradient(135deg, rgba(0,96,168,.18), rgba(50,156,50,.18)) !important; }
 
+  /* Light-theme overrides for sections that hardcode dark inline backgrounds.
+     These ensure every page swaps colors when the theme is toggled. */
+  html:not([data-theme="dark"]) #about {
+    background: linear-gradient(180deg, #F7FAFC 0%, #ECF1EE 100%) !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) #events {
+    background: #F4F6F4 !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) #events .text-white\/80,
+  html:not([data-theme="dark"]) #events .text-white\/75,
+  html:not([data-theme="dark"]) #events .text-white\/70,
+  html:not([data-theme="dark"]) #events .text-white\/65,
+  html:not([data-theme="dark"]) #events .text-white\/60,
+  html:not([data-theme="dark"]) #events .text-white\/55,
+  html:not([data-theme="dark"]) #events .text-white\/50 { color: #5C5C5C !important; }
+  html:not([data-theme="dark"]) #events .text-white { color: #101418 !important; }
+  html:not([data-theme="dark"]) #events article[style*="rgba(20,24,30"] {
+    background: rgba(255,255,255,0.85) !important;
+    border-color: rgba(16,20,24,0.10) !important;
+  }
+  html:not([data-theme="dark"]) footer {
+    background: #EEF1F0 !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) footer .text-white,
+  html:not([data-theme="dark"]) footer .text-white\/80,
+  html:not([data-theme="dark"]) footer .text-white\/70,
+  html:not([data-theme="dark"]) footer .text-white\/65,
+  html:not([data-theme="dark"]) footer .text-white\/60,
+  html:not([data-theme="dark"]) footer .text-white\/55,
+  html:not([data-theme="dark"]) footer .text-white\/50 { color: #5C5C5C !important; }
+  html:not([data-theme="dark"]) footer .border-white\/10 { border-color: rgba(16,20,24,0.10) !important; }
+
   /* Buttons */
   .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:10px; font-weight:600; font-size:14px; transition: transform .15s ease, box-shadow .2s ease, background .15s ease; }
   .btn:hover { transform: translateY(-1px); }
