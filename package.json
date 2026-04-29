@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel deploy --prod",
-    "db:init": "psql \"$DATABASE_URL\" -f db/schema.sql"
+    "db:init": "psql \"$DATABASE_URL\" -f db/schema.sql",
+    "db:create-user": "node scripts/create-user.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.4"
