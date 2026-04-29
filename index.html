@@ -271,36 +271,27 @@
   }
   body.no-cursor-fx .cursor-spotlight { opacity: 0; }
 
-  /* === Custom dot cursor === */
+  /* === Custom dot cursor (modern minimal — single moving point, no ring) === */
   body.cursor-dot, body.cursor-dot * { cursor: none !important; }
   .cursor-dot-el {
     position: fixed;
     top: 0; left: 0;
-    width: 10px; height: 10px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: linear-gradient(135deg, #329C32, #0060A8);
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: width .18s ease, height .18s ease, opacity .2s ease;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 14px rgba(0,96,168,0.45);
+    transition: width .18s ease, height .18s ease, opacity .2s ease, box-shadow .2s ease;
+    box-shadow: 0 0 10px rgba(0,96,168,0.35);
+    will-change: transform;
   }
-  .cursor-dot-ring {
-    position: fixed;
-    top: 0; left: 0;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(50,156,50,0.55);
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width .2s ease, height .2s ease, border-color .2s ease, opacity .2s ease;
+  .cursor-dot-ring { display: none !important; }
+  body:not(.cursor-dot) .cursor-dot-el { display: none; }
+  body.cursor-dot.cursor-hover .cursor-dot-el {
+    width: 14px; height: 14px;
+    box-shadow: 0 0 18px rgba(0,96,168,0.55);
   }
-  html[data-theme="dark"] .cursor-dot-ring { border-color: rgba(124,212,135,0.6); }
-  body:not(.cursor-dot) .cursor-dot-el,
-  body:not(.cursor-dot) .cursor-dot-ring { display: none; }
-  body.cursor-dot.cursor-hover .cursor-dot-el { width: 6px; height: 6px; }
-  body.cursor-dot.cursor-hover .cursor-dot-ring { width: 56px; height: 56px; border-color: rgba(0,96,168,0.7); }
 
   /* Navbar quick toggles */
   .nav-toggle { width:34px; height:34px; border-radius:9px; border:1px solid var(--line-2, rgba(0,0,0,.1)); background: transparent; color:var(--ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; line-height:1; transition: background .15s ease, transform .15s ease, border-color .15s ease; padding:0; font-family: inherit; }
