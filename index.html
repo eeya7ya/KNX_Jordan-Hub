@@ -6,7 +6,7 @@
 <title>KNX Jordan Club — The Society of Certified Building Automation Professionals in Jordan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800;900&family=Readex+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = { theme: { extend: {
@@ -57,10 +57,12 @@
   /* Soft animated drift on the colored layer for liveliness */
   @keyframes bgDrift { 0%,100%{transform:translate3d(0,0,0);} 50%{transform:translate3d(-1.5%, 1%, 0);} }
   body::before { animation: bgDrift calc(38s / var(--motion)) ease-in-out infinite; }
-  body[data-lang="ar"] { font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif; }
+  body[data-lang="ar"] { font-family:'Tajawal','IBM Plex Sans Arabic','Inter',system-ui,sans-serif; letter-spacing:0; }
+  body[data-lang="ar"] p, body[data-lang="ar"] li, body[data-lang="ar"] span, body[data-lang="ar"] a { line-height:1.75; }
   .font-display { font-family:'Sora',system-ui,sans-serif; letter-spacing:-.01em; }
-  body[data-lang="ar"] .font-display { font-family:'IBM Plex Sans Arabic','Sora',system-ui,sans-serif; }
-  body[data-lang="ar"] .font-mono, body[data-lang="ar"] .font-mono * { font-family:'IBM Plex Sans Arabic','JetBrains Mono',monospace; }
+  body[data-lang="ar"] .font-display { font-family:'Readex Pro','Tajawal','IBM Plex Sans Arabic','Sora',system-ui,sans-serif; letter-spacing:-.01em; font-weight:700; }
+  body[data-lang="ar"] h1.font-display, body[data-lang="ar"] h2.font-display { letter-spacing:-.02em; line-height:1.2; }
+  body[data-lang="ar"] .font-mono, body[data-lang="ar"] .font-mono * { font-family:'Tajawal','IBM Plex Sans Arabic','JetBrains Mono',monospace; }
   [dir="rtl"] svg.flip-rtl { transform: scaleX(-1); }
 
   /* Glass */
@@ -226,7 +228,32 @@
   section[id] { scroll-margin-top: 80px; }
 
   /* HERO BACKGROUND — much stronger now: animated grid, drifting blobs, and circuit canvas */
-  .hero { position:relative; overflow:hidden; }
+  .hero {
+    position:relative; overflow:hidden;
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    background: radial-gradient(80% 60% at 50% 0%, rgba(0,96,168,0.08), transparent 70%), #07101A;
+  }
+  html:not([data-theme="dark"]) .hero { background: radial-gradient(80% 60% at 50% 0%, rgba(0,96,168,0.10), transparent 70%), linear-gradient(180deg, #061224 0%, #08182B 100%); color: #ECEFF3; }
+  html:not([data-theme="dark"]) .hero .text-knx-gray-600 { color: #B8C3D2 !important; }
+  html:not([data-theme="dark"]) .hero .text-knx-gray-800 { color: #E2E8F0 !important; }
+  html:not([data-theme="dark"]) .hero .glass { background: rgba(20,28,40,0.55); border-color: rgba(255,255,255,0.10); }
+  html:not([data-theme="dark"]) .hero .cred-card { background: linear-gradient(180deg, rgba(28,32,38,0.92), rgba(20,24,30,0.92)); color:#ECEFF3; }
+  html:not([data-theme="dark"]) .hero .cred-field { background: rgba(255,255,255,0.04); }
+  html:not([data-theme="dark"]) .hero .cred-pill { background: rgba(28,32,38,0.95); color:#ECEFF3; }
+  .hero-inner { flex: 1 1 auto; display:flex; flex-direction:column; justify-content:center; }
+  .hero-marquee { margin-top: auto; }
+
+  /* ABOUT section — continues hero's dark sequence */
+  #about .bg-white { background: rgba(20,28,40,0.55) !important; border-color: rgba(255,255,255,0.08) !important; color:#ECEFF3; }
+  #about .text-knx-gray-600 { color:#B8C3D2 !important; }
+  #about .text-knx-gray-800 { color:#E2E8F0 !important; }
+  #about .border-knx-gray-200 { border-color: rgba(255,255,255,0.10) !important; }
+  #about .bg-knx-gray-200 { background: rgba(255,255,255,0.10) !important; }
+  #about .bg-knx-green-50 { background: rgba(50,156,50,0.18) !important; }
+  #about .bg-knx-blue-50 { background: rgba(0,96,168,0.18) !important; }
+  #about .text-knx-blue-700 { color:#7FB6E6 !important; }
+  #about .text-knx-green-700 { color:#7CD487 !important; }
   .hero-bg { position:absolute; inset:0; pointer-events:none; }
   .blob { position:absolute; filter: blur(80px); opacity:.55; mix-blend-mode: screen; will-change: transform; }
   html:not([data-theme="dark"]) .blob { mix-blend-mode: multiply; opacity:.22; }
@@ -316,6 +343,13 @@
   }
 
   /* Navbar quick toggles */
+  .nav-tools { display:inline-flex; align-items:center; padding:3px; border-radius:11px; border:1px solid var(--line-2, rgba(0,0,0,.1)); background: rgba(255,255,255,0.04); }
+  html[data-theme="dark"] .nav-tools { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); }
+  .nav-tools-sep { width:1px; height:18px; background: var(--line-2, rgba(0,0,0,.12)); opacity:.6; margin:0 2px; }
+  html[data-theme="dark"] .nav-tools-sep { background: rgba(255,255,255,0.14); }
+  .nav-toggle--bare { border:0 !important; background: transparent !important; width:30px !important; height:30px !important; border-radius:8px !important; }
+  .nav-toggle--bare:hover { background: rgba(0,96,168,0.10) !important; }
+  html[data-theme="dark"] .nav-toggle--bare:hover { background: rgba(127,182,230,0.16) !important; }
   .nav-toggle { width:34px; height:34px; border-radius:9px; border:1px solid var(--line-2, rgba(0,0,0,.1)); background: transparent; color:var(--ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; line-height:1; transition: background .15s ease, transform .15s ease, border-color .15s ease; padding:0; font-family: inherit; }
   .nav-toggle:hover { background: rgba(0,96,168,0.08); border-color: rgba(0,96,168,0.35); }
   html[data-theme="dark"] .nav-toggle { border-color: rgba(255,255,255,0.14); }
@@ -386,27 +420,31 @@
 <!-- ============ NAV ============ -->
 <header id="top" class="fixed top-0 inset-x-0 z-50">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 mt-3">
-    <nav class="glass rounded-xl px-4 sm:px-5 py-3 flex items-center justify-between">
-      <a href="#top" class="flex items-end gap-3 leading-none">
+    <nav class="glass rounded-xl px-4 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6">
+      <a href="#top" class="flex items-end gap-3 leading-none justify-self-start">
         <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto block" />
         <span class="font-display font-bold text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap leading-none">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
       </a>
-      <div class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-knx-gray-800">
-        <a href="#about" class="hover:text-knx-blue i18n" data-en="About" data-ar="من نحن">About</a>
-        <a href="#directory" class="hover:text-knx-blue i18n" data-en="Directory" data-ar="الدليل">Directory</a>
-        <a href="#events" class="hover:text-knx-blue i18n" data-en="Events" data-ar="الفعاليات">Events</a>
-        <a href="#news" class="hover:text-knx-blue i18n" data-en="News" data-ar="الأخبار">News</a>
-        <a href="#contact" class="hover:text-knx-blue i18n" data-en="Contact" data-ar="تواصل">Contact</a>
+      <div class="hidden lg:flex items-center justify-center gap-8 text-[13.5px] font-medium text-knx-gray-800 justify-self-center">
+        <a href="#about" class="hover:text-knx-blue transition-colors i18n" data-en="About" data-ar="من نحن">About</a>
+        <a href="#directory" class="hover:text-knx-blue transition-colors i18n" data-en="Directory" data-ar="الدليل">Directory</a>
+        <a href="#events" class="hover:text-knx-blue transition-colors i18n" data-en="Events" data-ar="الفعاليات">Events</a>
+        <a href="#news" class="hover:text-knx-blue transition-colors i18n" data-en="News" data-ar="الأخبار">News</a>
+        <a href="#contact" class="hover:text-knx-blue transition-colors i18n" data-en="Contact" data-ar="تواصل">Contact</a>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="nav-theme" type="button" class="nav-toggle" aria-label="Toggle theme" title="Toggle theme">
-          <span class="nav-toggle-ico" data-show-when="light">☾</span>
-          <span class="nav-toggle-ico" data-show-when="dark">☀</span>
-        </button>
-        <button id="nav-lang" type="button" class="nav-toggle nav-toggle-text" aria-label="Toggle language" title="Toggle language">
-          <span class="nav-toggle-ico" data-show-when="en">ع</span>
-          <span class="nav-toggle-ico" data-show-when="ar">EN</span>
-        </button>
+      <div class="flex items-center gap-3 justify-self-end">
+        <div class="nav-tools" role="group" aria-label="Preferences">
+          <button id="nav-theme" type="button" class="nav-toggle nav-toggle--bare" aria-label="Toggle theme" title="Toggle theme">
+            <span class="nav-toggle-ico" data-show-when="light">☾</span>
+            <span class="nav-toggle-ico" data-show-when="dark">☀</span>
+          </button>
+          <span class="nav-tools-sep" aria-hidden="true"></span>
+          <button id="nav-lang" type="button" class="nav-toggle nav-toggle--bare nav-toggle-text" aria-label="Toggle language" title="Toggle language">
+            <span class="nav-toggle-ico" data-show-when="en">ع</span>
+            <span class="nav-toggle-ico" data-show-when="ar">EN</span>
+          </button>
+        </div>
+        <span class="hidden sm:block w-px h-6 bg-[var(--line-2)] opacity-60" aria-hidden="true"></span>
         <a href="#contact" class="btn-apply">
           <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
           <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -417,7 +455,7 @@
 </header>
 
 <!-- ============ HERO ============ -->
-<section class="hero pt-36 pb-28" style="font-family: Sora">
+<section class="hero pt-28 pb-0" style="font-family: Sora">
   <div class="hero-bg">
     <div class="grid-anim"></div>
     <div class="blob b1"></div>
@@ -427,7 +465,7 @@
     <div class="scanlines"></div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+  <div class="hero-inner relative max-w-7xl mx-auto px-5 sm:px-8 w-full">
     <div class="grid lg:grid-cols-12 gap-10 items-start">
       <div class="lg:col-span-7" id="hero-copy">
         <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 mb-6">
@@ -492,7 +530,7 @@
     </div>
 
     <!-- Full-width stat strip — spans hero bottom -->
-    <div class="mt-16 glass rounded-2xl p-6 md:p-7" id="stat-strip">
+    <div class="mt-12 glass rounded-2xl p-6 md:p-7" id="stat-strip">
       <div class="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
         <div class="md:col-span-5 grid grid-cols-3 divide-x divide-[var(--line)]">
           <div class="pe-5">
@@ -526,9 +564,9 @@
     </div>
   </div>
 
-  <div class="relative mt-24 border-y" style="border-color:var(--line-2); background:var(--bg-alt);">
+  <div class="hero-marquee relative mt-12 border-y" style="border-color:rgba(255,255,255,0.08); background:rgba(7,16,26,0.85); backdrop-filter:blur(8px);">
     <div class="overflow-hidden py-5">
-      <div class="marquee-track flex items-center gap-12 whitespace-nowrap text-[13px] uppercase tracking-[0.18em] font-medium" style="width: max-content; color: var(--ink-2);">
+      <div class="marquee-track flex items-center gap-12 whitespace-nowrap text-[13px] uppercase tracking-[0.18em] font-medium" style="width: max-content; color: #C9CED7;">
         <span class="i18n" data-en="KNX Association · Brussels · est. 1990" data-ar="جمعية KNX · بروكسل · تأسست 1990">KNX Association · Brussels · est. 1990</span><span class="text-knx-green">●</span>
         <span class="i18n" data-en="ISO/IEC 14543-3 open standard" data-ar="معيار مفتوح ISO/IEC 14543-3">ISO/IEC 14543-3 open standard</span><span class="text-knx-blue">●</span>
         <span class="i18n" data-en="500+ member manufacturers" data-ar="أكثر من 500 شركة عضو">500+ member manufacturers</span><span class="text-knx-green">●</span>
@@ -558,7 +596,7 @@
 </section>
 
 <!-- ABOUT -->
-<section id="about" class="py-28">
+<section id="about" class="py-28 relative" style="background: linear-gradient(180deg, #07101A 0%, #0A1422 100%); color:#ECEFF3;">
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
     <div class="grid lg:grid-cols-12 gap-12 items-start">
       <div class="lg:col-span-5 reveal">
