@@ -21,11 +21,21 @@ serverless Postgres via Vercel Edge Functions.
 ├── index.html            # the public site (primary deliverable)
 ├── assets/
 │   └── knx-logo.png
+├── admin.html            # member portal: sign-in + dashboard
 ├── api/
-│   ├── apply.js          # POST  /api/apply   — write to applications
-│   └── members.js        # GET   /api/members — read directory
+│   ├── apply.js          # POST  /api/apply           — write application
+│   ├── members.js        # GET   /api/members         — read directory
+│   ├── _lib/auth.js      # password hashing, sessions, cookie helpers
+│   ├── auth/
+│   │   ├── login.js      # POST  /api/auth/login
+│   │   ├── logout.js     # POST  /api/auth/logout
+│   │   └── me.js         # GET   /api/auth/me
+│   └── admin/
+│       └── applications.js  # GET /api/admin/applications  (admin only)
 ├── db/
-│   └── schema.sql        # Neon tables + seed data
+│   └── schema.sql        # Neon tables (applications, members, users, sessions)
+├── scripts/
+│   └── create-user.mjs   # CLI to create or update a user
 ├── package.json
 ├── vercel.json
 └── .env.example
@@ -83,3 +93,33 @@ Insert a membership application.
 Returns the published member directory (used to hydrate the homepage
 directory grid). Falls back to a hard-coded list if the API is
 unavailable, so the page renders even without a database.
+
+## Authentication
+
+Auth is rolled in-house against Neon — no third-party auth provider.
+
+- Passwords: PBKDF2-SHA-256 (100k iterations, 16-byte salt) using Web Crypto.
+- Sessions: 256-bit opaque token in an `HttpOnly; Secure; SameSite=Lax`
+  cookie (`knx_session`); only the SHA-256 of the token is stored, in the
+  `sessions` table. Default TTL is 14 days.
+- Roles: `member` (default) and `admin`. Admin-only endpoints check
+  `user.role === 'admin'`.
+
+### Endpoints
+
+- `POST /api/auth/login`  — `{ email, password }` → sets cookie, returns user
+- `POST /api/auth/logout` — clears cookie + deletes the session row
+- `GET  /api/auth/me`     — returns `{ user }` or `{ user: null }`
+- `GET  /api/admin/applications` — admin only, lists recent applications
+
+### Seeding the first admin
+
+There's no public sign-up. Create the first admin from your machine:
+
+```sh
+DATABASE_URL="postgres://…neon.tech/…?sslmode=require" \
+  npm run db:create-user -- admin@knxjordan.org "a-strong-password" "Admin Name" admin
+```
+
+Re-running the command with the same email **updates** that user's
+password and role.

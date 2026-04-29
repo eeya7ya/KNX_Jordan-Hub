@@ -34,6 +34,26 @@ CREATE TABLE IF NOT EXISTS members (
 
 CREATE INDEX IF NOT EXISTS members_published_idx ON members (published);
 
+CREATE TABLE IF NOT EXISTS users (
+  id            BIGSERIAL PRIMARY KEY,
+  email         TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role          TEXT NOT NULL DEFAULT 'member',
+  full_name     TEXT,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_login_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+  token_hash  TEXT PRIMARY KEY,
+  user_id     BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at  TIMESTAMPTZ NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS sessions_user_idx    ON sessions (user_id);
+CREATE INDEX IF NOT EXISTS sessions_expires_idx ON sessions (expires_at);
+
 -- Seed the directory so /api/members has data on first deploy.
 INSERT INTO members (name, name_ar, tier, firm, city, city_ar, specialty, specialty_ar, since, color) VALUES
   ('Marwa Al-Habashneh', 'مروة الحباشنة', 'Tutor',        'Royal Smart Homes',          'Amman',  'عمّان',   'HVAC · Multi-zone',         'تكييف · مناطق متعدّدة', 2019, '#0060A8'),

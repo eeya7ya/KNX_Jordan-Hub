@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Member portal · KNX Jordan Club</title>
+<link rel="icon" href="assets/knx-logo.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      'knx-blue': '#0060A8', 'knx-blue-700': '#004A82', 'knx-blue-50': '#EAF2F9',
+      'knx-green': '#329C32', 'knx-green-700': '#23751F',
+      'knx-ink': '#0A0F14', 'knx-gray-50': '#F4F6F8', 'knx-gray-100': '#E7EBEF',
+      'knx-gray-200': '#D5DAE0', 'knx-gray-600': '#6B7480', 'knx-gray-800': '#2A323B',
+    },
+    fontFamily: { display: ['Sora', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono','monospace'] },
+  }}};
+</script>
+<style>
+  :root {
+    --bg:#FFFFFF; --bg-alt:#F4F6F8; --ink:#0A0F14; --ink-2:#2A323B;
+    --muted:#6B7480; --line:#E7EBEF; --line-2:#D5DAE0; --blue:#0060A8; --green:#329C32;
+  }
+  html[data-theme="dark"] {
+    --bg:#0A0F14; --bg-alt:#11161E; --ink:#E9EDF1; --ink-2:#C9D2DC;
+    --muted:#8B95A2; --line:#1E2630; --line-2:#2A323B;
+  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  body[dir="rtl"] { font-family: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif; }
+  .font-display { font-family: 'Sora', system-ui, sans-serif; }
+  .panel { background: var(--bg); border:1px solid var(--line-2); border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.06); }
+  html[data-theme="dark"] .panel { background: var(--bg-alt); box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  .field {
+    width:100%; padding:12px 14px; border:1px solid var(--line-2); border-radius:10px;
+    background:var(--bg); color:var(--ink); font-size:14px;
+    transition: border .15s ease, box-shadow .15s ease;
+  }
+  .field:focus { outline:none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,96,168,.15); }
+  html[data-theme="dark"] .field { background: var(--bg-alt); }
+  .label { font-size:12px; font-weight:600; color: var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:6px; display:block; }
+  .btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:11px 18px; border-radius:10px; font-weight:600; font-size:14px;
+    border:1px solid transparent; cursor:pointer; transition: transform .12s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary { background: linear-gradient(135deg, #0060A8, #329C32); color:#fff; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,96,168,.3); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+  .btn-ghost:hover { background: var(--bg-alt); }
+  .pill {
+    display:inline-flex; align-items:center; gap:6px; padding:3px 10px;
+    border-radius:999px; font-size:11px; font-weight:600;
+    background: rgba(0,96,168,.1); color: var(--blue);
+  }
+  .pill-admin { background: rgba(50,156,50,.12); color: var(--green); }
+  .row { border-bottom: 1px solid var(--line); padding: 14px 0; }
+  .row:last-child { border-bottom: 0; }
+  .err { color:#B7260C; font-size: 13px; margin-top: 8px; min-height: 1em; }
+  html[data-theme="dark"] .err { color:#FF8A6A; }
+  .nav-toggle {
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--line-2); background:transparent;
+    color:var(--ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+    font-size:15px; line-height:1; transition: background .15s ease;
+  }
+  .nav-toggle:hover { background: rgba(0,96,168,.08); }
+  .nav-toggle-text { font-size:12px; font-weight:600; min-width:38px; }
+  .nav-toggle .ico { display:none; }
+  html:not([data-theme="dark"]) .nav-toggle .ico[data-show-when="light"] { display:inline; }
+  html[data-theme="dark"] .nav-toggle .ico[data-show-when="dark"] { display:inline; }
+  body[data-lang="en"] .nav-toggle .ico[data-show-when="en"] { display:inline; }
+  body[data-lang="ar"] .nav-toggle .ico[data-show-when="ar"] { display:inline; }
+</style>
+</head>
+<body class="min-h-screen" data-lang="en">
+
+<header class="border-b" style="border-color: var(--line);">
+  <div class="max-w-5xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3">
+      <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto" />
+      <span class="font-display font-bold text-[15px] tracking-tight">
+        <span class="i18n" data-en="Member portal" data-ar="بوابة الأعضاء">Member portal</span>
+      </span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button id="nav-theme" type="button" class="nav-toggle" aria-label="Toggle theme">
+        <span class="ico" data-show-when="light">☾</span>
+        <span class="ico" data-show-when="dark">☀</span>
+      </button>
+      <button id="nav-lang" type="button" class="nav-toggle nav-toggle-text" aria-label="Toggle language">
+        <span class="ico" data-show-when="en">ع</span>
+        <span class="ico" data-show-when="ar">EN</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-5 sm:px-8 py-12">
+
+  <!-- SIGN-IN -->
+  <section id="signin-view" class="hidden">
+    <div class="max-w-md mx-auto panel p-8">
+      <h1 class="font-display font-bold text-2xl i18n" data-en="Sign in" data-ar="تسجيل الدخول">Sign in</h1>
+      <p class="text-sm mt-2" style="color: var(--muted);">
+        <span class="i18n" data-en="Members and administrators only." data-ar="للأعضاء والمسؤولين فقط.">Members and administrators only.</span>
+      </p>
+      <form id="signin-form" class="mt-6 space-y-4" novalidate>
+        <div>
+          <label class="label i18n" for="signin-email" data-en="Email" data-ar="البريد الإلكتروني">Email</label>
+          <input id="signin-email" type="email" autocomplete="email" required class="field" />
+        </div>
+        <div>
+          <label class="label i18n" for="signin-password" data-en="Password" data-ar="كلمة المرور">Password</label>
+          <input id="signin-password" type="password" autocomplete="current-password" required class="field" />
+        </div>
+        <button id="signin-submit" type="submit" class="btn btn-primary w-full">
+          <span class="i18n" data-en="Sign in" data-ar="دخول">Sign in</span>
+        </button>
+        <div class="err" id="signin-error" role="alert"></div>
+      </form>
+      <div id="test-hint" class="hidden mt-5 p-3 rounded-lg text-[12.5px]" style="background: rgba(50,156,50,.1); border:1px solid rgba(50,156,50,.3); color: var(--ink);">
+        <div class="font-semibold mb-1">Test mode is on</div>
+        <div>Email: <code class="font-mono">admin@test.com</code></div>
+        <div>Password: <code class="font-mono">test1234</code></div>
+        <button type="button" id="test-fill" class="mt-2 underline" style="color: var(--blue);">Fill these in</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard-view" class="hidden">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+      <div>
+        <div class="text-xs uppercase tracking-widest" style="color: var(--muted);">
+          <span class="i18n" data-en="Signed in" data-ar="تم تسجيل الدخول">Signed in</span>
+        </div>
+        <h1 class="font-display font-bold text-3xl mt-1">
+          <span id="hello-name">—</span>
+          <span id="role-pill" class="pill ml-2 align-middle">member</span>
+        </h1>
+        <div class="text-sm mt-1" style="color: var(--muted);" id="hello-email">—</div>
+      </div>
+      <button id="signout-btn" class="btn btn-ghost">
+        <span class="i18n" data-en="Sign out" data-ar="تسجيل الخروج">Sign out</span>
+      </button>
+    </div>
+
+    <!-- Member view -->
+    <div id="member-panel" class="panel p-6 hidden">
+      <h2 class="font-display font-semibold text-lg i18n" data-en="Welcome" data-ar="أهلاً">Welcome</h2>
+      <p class="text-sm mt-2" style="color: var(--muted);" >
+        <span class="i18n" data-en="Member features will appear here. Contact an administrator if you need elevated access." data-ar="ستظهر ميزات الأعضاء هنا. تواصل مع المسؤول إذا احتجت إلى صلاحيات إضافية.">Member features will appear here. Contact an administrator if you need elevated access.</span>
+      </p>
+    </div>
+
+    <!-- Admin view -->
+    <div id="admin-panel" class="panel p-6 hidden">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="font-display font-semibold text-lg i18n" data-en="Membership applications" data-ar="طلبات العضوية">Membership applications</h2>
+        <button id="reload-apps" class="btn btn-ghost" type="button">
+          <span class="i18n" data-en="Refresh" data-ar="تحديث">Refresh</span>
+        </button>
+      </div>
+      <div id="apps-list" class="mt-4 text-sm">
+        <div style="color: var(--muted);" class="i18n" data-en="Loading…" data-ar="جارٍ التحميل…">Loading…</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const state = {
+  theme: localStorage.getItem('knx-theme') || 'light',
+  lang:  localStorage.getItem('knx-lang')  || 'en',
+};
+
+function applyChrome() {
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.documentElement.setAttribute('dir', state.lang === 'ar' ? 'rtl' : 'ltr');
+  document.body.setAttribute('data-lang', state.lang);
+  document.querySelectorAll('.i18n').forEach(el => {
+    const txt = el.getAttribute('data-' + state.lang);
+    if (txt) el.textContent = txt;
+  });
+}
+applyChrome();
+
+document.getElementById('nav-theme').addEventListener('click', () => {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('knx-theme', state.theme);
+  applyChrome();
+});
+document.getElementById('nav-lang').addEventListener('click', () => {
+  state.lang = state.lang === 'ar' ? 'en' : 'ar';
+  localStorage.setItem('knx-lang', state.lang);
+  applyChrome();
+  // Re-render dynamic pieces if present
+  if (lastApps) renderApps(lastApps);
+});
+
+const signinView    = document.getElementById('signin-view');
+const dashboardView = document.getElementById('dashboard-view');
+const memberPanel   = document.getElementById('member-panel');
+const adminPanel    = document.getElementById('admin-panel');
+const signinError   = document.getElementById('signin-error');
+const signinSubmit  = document.getElementById('signin-submit');
+
+let lastApps = null;
+
+function show(view) {
+  signinView.classList.toggle('hidden', view !== 'signin');
+  dashboardView.classList.toggle('hidden', view !== 'dashboard');
+}
+
+async function fetchMe() {
+  const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+  if (!r.ok) return { user: null, testMode: false };
+  return r.json();
+}
+
+function showTestHint(on) {
+  document.getElementById('test-hint').classList.toggle('hidden', !on);
+}
+document.getElementById('test-fill').addEventListener('click', () => {
+  document.getElementById('signin-email').value = 'admin@test.com';
+  document.getElementById('signin-password').value = 'test1234';
+});
+
+function renderUser(user) {
+  document.getElementById('hello-name').textContent  = user.full_name || user.email;
+  document.getElementById('hello-email').textContent = user.email;
+  const pill = document.getElementById('role-pill');
+  pill.textContent = user.role;
+  pill.classList.toggle('pill-admin', user.role === 'admin');
+  memberPanel.classList.toggle('hidden', user.role === 'admin');
+  adminPanel.classList.toggle('hidden',  user.role !== 'admin');
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',
+  }[c]));
+}
+
+function renderApps(apps) {
+  lastApps = apps;
+  const list = document.getElementById('apps-list');
+  if (!apps.length) {
+    const empty = state.lang === 'ar' ? 'لا توجد طلبات بعد.' : 'No applications yet.';
+    list.innerHTML = `<div style="color: var(--muted);">${empty}</div>`;
+    return;
+  }
+  const labels = state.lang === 'ar'
+    ? { tier:'الفئة', loc:'الموقع', status:'الحالة' }
+    : { tier:'Tier', loc:'Location', status:'Status' };
+
+  list.innerHTML = apps.map(a => `
+    <div class="row">
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <div class="font-semibold">${escapeHtml(a.full_name)}</div>
+          <div class="font-mono text-xs" style="color: var(--muted);">${escapeHtml(a.email)}</div>
+        </div>
+        <div class="text-xs" style="color: var(--muted);">${escapeHtml(new Date(a.created_at).toLocaleString())}</div>
+      </div>
+      <div class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs" style="color: var(--muted);">
+        <span><b>${labels.tier}:</b> ${escapeHtml(a.tier || '—')}</span>
+        <span><b>${labels.loc}:</b> ${escapeHtml(a.location || '—')}</span>
+        <span><b>${labels.status}:</b> ${escapeHtml(a.status || 'pending')}</span>
+      </div>
+      ${a.experience ? `<p class="mt-2 text-sm">${escapeHtml(a.experience)}</p>` : ''}
+    </div>
+  `).join('');
+}
+
+async function loadApps() {
+  const list = document.getElementById('apps-list');
+  list.innerHTML = `<div style="color: var(--muted);">${state.lang === 'ar' ? 'جارٍ التحميل…' : 'Loading…'}</div>`;
+  const r = await fetch('/api/admin/applications', { credentials: 'same-origin' });
+  if (r.status === 401) { show('signin'); return; }
+  if (!r.ok) {
+    list.innerHTML = `<div class="err">${state.lang === 'ar' ? 'تعذّر تحميل الطلبات.' : 'Failed to load applications.'}</div>`;
+    return;
+  }
+  const data = await r.json();
+  renderApps(data.applications || []);
+}
+
+document.getElementById('reload-apps').addEventListener('click', loadApps);
+
+document.getElementById('signin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  signinError.textContent = '';
+  const email = document.getElementById('signin-email').value.trim();
+  const password = document.getElementById('signin-password').value;
+  if (!email || !password) {
+    signinError.textContent = state.lang === 'ar' ? 'يرجى إدخال البريد وكلمة المرور.' : 'Email and password are required.';
+    return;
+  }
+  signinSubmit.disabled = true;
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      signinError.textContent = data.error || (state.lang === 'ar' ? 'تعذّر تسجيل الدخول.' : 'Sign-in failed.');
+      return;
+    }
+    renderUser(data.user);
+    show('dashboard');
+    if (data.user.role === 'admin') loadApps();
+  } catch {
+    signinError.textContent = state.lang === 'ar' ? 'خطأ في الشبكة.' : 'Network error.';
+  } finally {
+    signinSubmit.disabled = false;
+  }
+});
+
+document.getElementById('signout-btn').addEventListener('click', async () => {
+  await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+  show('signin');
+  document.getElementById('signin-password').value = '';
+});
+
+(async function init() {
+  const { user, testMode } = await fetchMe();
+  showTestHint(!!testMode);
+  if (user) {
+    renderUser(user);
+    show('dashboard');
+    if (user.role === 'admin') loadApps();
+  } else {
+    show('signin');
+  }
+})();
+</script>
+</body>
+</html>
