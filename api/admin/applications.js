@@ -1,4 +1,4 @@
-import { getSql, getCurrentUser, testAuthEnabled, json } from '../_lib/auth.js';
+import { getSql, getCurrentUser, testAuthEnabled, isDemoUser, json } from '../_lib/auth.js';
 
 export const config = { runtime: 'edge' };
 
@@ -28,7 +28,8 @@ export default async function handler(req) {
   if (!user) return json({ error: 'Unauthorized' }, 401);
   if (user.role !== 'admin') return json({ error: 'Forbidden' }, 403);
 
-  if (testAuthEnabled()) {
+  // Serve mock data for the demo admin so the dashboard works without a DB.
+  if (testAuthEnabled() || isDemoUser(user)) {
     return json({ applications: MOCK_APPLICATIONS });
   }
 

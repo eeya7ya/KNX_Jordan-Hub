@@ -104,10 +104,14 @@ export function getSql() {
 // DATABASE_URL is not set. Sign in with TEST_CREDS to get an admin session.
 export const TEST_TOKEN = 'test-mode-session';
 export const TEST_CREDS = { email: 'admin@test.com', password: 'test1234' };
-export const TEST_USER  = { id: 0, email: TEST_CREDS.email, role: 'admin', full_name: 'Test Admin' };
+export const TEST_USER  = { id: 0, email: TEST_CREDS.email, role: 'admin', full_name: 'Test Admin', testMode: true };
 
 export function testAuthEnabled() {
   return process.env.TEST_AUTH === '1' || !process.env.DATABASE_URL;
+}
+
+export function isDemoUser(user) {
+  return !!(user && (user.testMode === true || user.id === 0));
 }
 
 export async function getCurrentUser(req) {
