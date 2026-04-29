@@ -378,8 +378,34 @@
   .stat-trend { position:absolute; top:14px; right:14px; font-size:11px; font-weight:600; color:var(--green); display:inline-flex; align-items:center; gap:4px; padding:3px 7px; border-radius:999px; background: rgba(50,156,50,.10); }
 
   /* Reveal on scroll */
-  .reveal { opacity:0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal { opacity:0; transform: translateY(22px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); will-change: transform, opacity; }
   .reveal.in { opacity:1; transform: none; }
+  .reveal-left { transform: translateX(-28px); }
+  .reveal-right { transform: translateX(28px); }
+  .reveal-scale { transform: scale(.94); }
+  .reveal-blur { filter: blur(8px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), filter .8s ease; }
+  .reveal-blur.in { filter: blur(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+  }
+
+  /* Footer */
+  .site-footer { color:#fff; background:#0B0E12; transition: background .4s ease, color .4s ease; }
+  html:not([data-theme="dark"]) .site-footer {
+    color: var(--ink);
+    background:
+      radial-gradient(50% 60% at 0% 0%, rgba(0,96,168,0.10), transparent 70%),
+      radial-gradient(50% 60% at 100% 100%, rgba(50,156,50,0.10), transparent 70%),
+      linear-gradient(180deg, #F2F6FA 0%, #EEF6F1 100%);
+    border-top: 1px solid rgba(0,96,168,0.14);
+  }
+  html:not([data-theme="dark"]) .site-footer .text-white\/50 { color: var(--muted) !important; }
+  html:not([data-theme="dark"]) .site-footer .text-white\/55 { color: var(--muted) !important; }
+  html:not([data-theme="dark"]) .site-footer .text-white\/65 { color: var(--ink-2) !important; }
+  html:not([data-theme="dark"]) .site-footer .text-white\/70 { color: var(--ink-2) !important; }
+  html:not([data-theme="dark"]) .site-footer .text-white\/80 { color: var(--ink) !important; }
+  html:not([data-theme="dark"]) .site-footer .border-white\/10 { border-color: rgba(0,96,168,0.16) !important; }
+  html:not([data-theme="dark"]) .site-footer ul a:hover { color:#0060A8; }
 
   /* Grain overlay (uniqueness) */
   .grain::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:60; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.5'/></svg>"); opacity: var(--grain); mix-blend-mode: multiply; }
@@ -870,7 +896,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="text-white pt-20 pb-10" style="background:#0B0E12;">
+<footer class="site-footer pt-20 pb-10">
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
       <div>
@@ -1099,8 +1125,56 @@ const counterIO = new IntersectionObserver((entries) => {
 document.querySelectorAll('.counter').forEach(el => counterIO.observe(el));
 
 /* === Reveal on scroll === */
-const io = new IntersectionObserver((entries) => entries.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: 0.12 });
+const io = new IntersectionObserver((entries) => entries.forEach(e => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))), { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+/* Auto-tag common content blocks for scroll reveal so every section animates in */
+(function autoReveal(){
+  const groups = [
+    { sel: '#about .grid.sm\\:grid-cols-2 > div', variant: 'reveal-scale', stagger: true },
+    { sel: '#directory-grid > *', variant: 'reveal', stagger: true },
+    { sel: '#events article', variant: 'reveal', stagger: true },
+    { sel: '#news article', variant: 'reveal-scale', stagger: true },
+    { sel: '#contact form', variant: 'reveal-right' },
+    { sel: '#stat-strip', variant: 'reveal-blur' },
+    { sel: '.hero-marquee', variant: 'reveal' },
+    { sel: '.site-footer > div > div > div', variant: 'reveal', stagger: true },
+  ];
+  groups.forEach(g => {
+    const els = document.querySelectorAll(g.sel);
+    els.forEach((el, i) => {
+      el.classList.add('reveal');
+      if (g.variant && g.variant !== 'reveal') el.classList.add(g.variant);
+      if (g.stagger) el.style.transitionDelay = (0.06 * (i % 6)) + 's';
+    });
+  });
+})();
+
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* === Subtle scroll-driven parallax on hero blobs and grid === */
+(function heroParallax(){
+  const hero = document.querySelector('.hero');
+  if (!hero || !('IntersectionObserver' in window)) return;
+  const blobs = hero.querySelectorAll('.blob');
+  const grid = hero.querySelector('.grid-anim');
+  let ticking = false, visible = true;
+  const obs = new IntersectionObserver((es) => es.forEach(e => visible = e.isIntersecting), { threshold: 0 });
+  obs.observe(hero);
+  function onScroll(){
+    if (!visible || ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      blobs.forEach((b, i) => {
+        const k = (i + 1) * 0.06;
+        b.style.translate = `0 ${y * k}px`;
+      });
+      if (grid) grid.style.translate = `0 ${y * 0.12}px`;
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
 
 /* === Global mouse-follow color spotlight + custom dot cursor === */
 (function(){
