@@ -89,6 +89,41 @@
   /* News card top blocks: switch out faded gradients in dark */
   html[data-theme="dark"] .news-block { background: linear-gradient(135deg, rgba(0,96,168,.18), rgba(50,156,50,.18)) !important; }
 
+  /* Light-theme overrides for sections that hardcode dark inline backgrounds.
+     These ensure every page swaps colors when the theme is toggled. */
+  html:not([data-theme="dark"]) #about {
+    background: linear-gradient(180deg, #F7FAFC 0%, #ECF1EE 100%) !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) #events {
+    background: #F4F6F4 !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) #events .text-white\/80,
+  html:not([data-theme="dark"]) #events .text-white\/75,
+  html:not([data-theme="dark"]) #events .text-white\/70,
+  html:not([data-theme="dark"]) #events .text-white\/65,
+  html:not([data-theme="dark"]) #events .text-white\/60,
+  html:not([data-theme="dark"]) #events .text-white\/55,
+  html:not([data-theme="dark"]) #events .text-white\/50 { color: #5C5C5C !important; }
+  html:not([data-theme="dark"]) #events .text-white { color: #101418 !important; }
+  html:not([data-theme="dark"]) #events article[style*="rgba(20,24,30"] {
+    background: rgba(255,255,255,0.85) !important;
+    border-color: rgba(16,20,24,0.10) !important;
+  }
+  html:not([data-theme="dark"]) footer {
+    background: #EEF1F0 !important;
+    color: #101418 !important;
+  }
+  html:not([data-theme="dark"]) footer .text-white,
+  html:not([data-theme="dark"]) footer .text-white\/80,
+  html:not([data-theme="dark"]) footer .text-white\/70,
+  html:not([data-theme="dark"]) footer .text-white\/65,
+  html:not([data-theme="dark"]) footer .text-white\/60,
+  html:not([data-theme="dark"]) footer .text-white\/55,
+  html:not([data-theme="dark"]) footer .text-white\/50 { color: #5C5C5C !important; }
+  html:not([data-theme="dark"]) footer .border-white\/10 { border-color: rgba(16,20,24,0.10) !important; }
+
   /* Buttons */
   .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:10px; font-weight:600; font-size:14px; transition: transform .15s ease, box-shadow .2s ease, background .15s ease; }
   .btn:hover { transform: translateY(-1px); }
@@ -108,6 +143,20 @@
   .btn-apply:hover { transform: translateY(-1px); box-shadow:0 10px 24px rgba(50,156,50,.45); }
   .btn-apply svg { transition: transform .25s ease; }
   .btn-apply:hover svg { transform: translateX(3px); }
+
+  /* Nav tabs — each tab has its own frame */
+  .nav-tab {
+    display:inline-flex; align-items:center; padding:7px 14px; border-radius:9px;
+    border:1px solid var(--line-2); background: rgba(255,255,255,0.02);
+    color: var(--ink-2);
+    transition: color .15s ease, border-color .15s ease, background .15s ease, transform .15s ease;
+    line-height: 1;
+  }
+  .nav-tab:hover { border-color:#0060A8; color:#0060A8; background: rgba(0,96,168,0.08); }
+  .nav-tab.is-active { border-color:#0060A8; color:#0060A8; background: rgba(0,96,168,0.12); }
+  html[data-theme="dark"] .nav-tab { color: var(--ink-2); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); }
+  html[data-theme="dark"] .nav-tab:hover { color:#7FB6E6; border-color:#7FB6E6; background: rgba(0,96,168,0.18); }
+  html[data-theme="dark"] .nav-tab.is-active { color:#7FB6E6; border-color:#7FB6E6; background: rgba(0,96,168,0.22); }
 
   /* Field */
   .field { width:100%; padding:12px 14px; border:1px solid var(--line-2); border-radius:10px; background:var(--bg); font-size:14px; color:var(--ink); transition: border .15s ease, box-shadow .15s ease; }
@@ -419,18 +468,18 @@
 
 <!-- ============ NAV ============ -->
 <header id="top" class="fixed top-0 inset-x-0 z-50">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 mt-3">
+  <div class="max-w-[1700px] mx-auto px-4 sm:px-6 mt-3">
     <nav class="glass rounded-xl px-4 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6">
       <a href="#top" class="flex items-end gap-3 leading-none justify-self-start">
         <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto block" />
         <span class="font-display font-bold text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap leading-none">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
       </a>
-      <div class="hidden lg:flex items-center justify-center gap-8 text-[13.5px] font-medium text-knx-gray-800 justify-self-center">
-        <a href="#about" class="hover:text-knx-blue transition-colors i18n" data-en="About" data-ar="من نحن">About</a>
-        <a href="#directory" class="hover:text-knx-blue transition-colors i18n" data-en="Directory" data-ar="الدليل">Directory</a>
-        <a href="#events" class="hover:text-knx-blue transition-colors i18n" data-en="Events" data-ar="الفعاليات">Events</a>
-        <a href="#news" class="hover:text-knx-blue transition-colors i18n" data-en="News" data-ar="الأخبار">News</a>
-        <a href="#contact" class="hover:text-knx-blue transition-colors i18n" data-en="Contact" data-ar="تواصل">Contact</a>
+      <div class="hidden lg:flex items-center justify-center gap-2 text-[13.5px] font-medium text-knx-gray-800 justify-self-center">
+        <a href="#about" data-page="about" class="nav-tab i18n" data-en="About" data-ar="من نحن">About</a>
+        <a href="#directory" data-page="directory" class="nav-tab i18n" data-en="Directory" data-ar="الدليل">Directory</a>
+        <a href="#events" data-page="events" class="nav-tab i18n" data-en="Events" data-ar="الفعاليات">Events</a>
+        <a href="#news" data-page="news" class="nav-tab i18n" data-en="News" data-ar="الأخبار">News</a>
+        <a href="#contact" data-page="contact" class="nav-tab i18n" data-en="Contact" data-ar="تواصل">Contact</a>
       </div>
       <div class="flex items-center gap-3 justify-self-end">
         <div class="nav-tools" role="group" aria-label="Preferences">
@@ -455,7 +504,7 @@
 </header>
 
 <!-- ============ HERO ============ -->
-<section class="hero pt-28 pb-0" style="font-family: Sora">
+<section id="home" class="hero pt-28 pb-0" style="font-family: Sora">
   <div class="hero-bg">
     <div class="grid-anim"></div>
     <div class="blob b1"></div>
@@ -1351,6 +1400,48 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseout', (e) => {
   if (e.target && e.target.matches && e.target.matches('#directory-grid > article')) e.target.style.transform = '';
 });
+
+/* === Page-style nav: each tab shows only its section === */
+(function () {
+  const PAGE_IDS = ['about', 'directory', 'events', 'news', 'contact'];
+  const HOME_ID = 'home';
+  const home = document.getElementById(HOME_ID);
+  const sections = PAGE_IDS.map(id => document.getElementById(id)).filter(Boolean);
+
+  function showPage(id) {
+    const target = (!id || id === 'top' || id === HOME_ID) ? HOME_ID : id;
+    if (home) home.style.display = (target === HOME_ID) ? '' : 'none';
+    sections.forEach(sec => { sec.style.display = (sec.id === target) ? '' : 'none'; });
+
+    document.querySelectorAll('.nav-tab').forEach(a => {
+      a.classList.toggle('is-active', a.getAttribute('data-page') === target);
+    });
+
+    window.scrollTo(0, 0);
+  }
+
+  function idFromHash() {
+    const h = (location.hash || '').replace('#', '');
+    if (!h || h === 'top') return HOME_ID;
+    return PAGE_IDS.includes(h) ? h : HOME_ID;
+  }
+
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    const id = href.slice(1);
+    if (id !== 'top' && id !== HOME_ID && !PAGE_IDS.includes(id)) return;
+    e.preventDefault();
+    const target = (id === 'top') ? HOME_ID : id;
+    if (location.hash !== '#' + target) history.pushState(null, '', '#' + target);
+    showPage(target);
+  });
+
+  window.addEventListener('hashchange', () => showPage(idFromHash()));
+  showPage(idFromHash());
+})();
 </script>
 </body>
 </html>
