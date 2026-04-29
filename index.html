@@ -299,6 +299,18 @@
   body.cursor-dot.cursor-hover .cursor-dot-el { width: 6px; height: 6px; }
   body.cursor-dot.cursor-hover .cursor-dot-ring { width: 56px; height: 56px; border-color: rgba(0,96,168,0.7); }
 
+  /* Navbar quick toggles */
+  .nav-toggle { width:34px; height:34px; border-radius:9px; border:1px solid var(--line-2, rgba(0,0,0,.1)); background: transparent; color:var(--ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; line-height:1; transition: background .15s ease, transform .15s ease, border-color .15s ease; padding:0; font-family: inherit; }
+  .nav-toggle:hover { background: rgba(0,96,168,0.08); border-color: rgba(0,96,168,0.35); }
+  html[data-theme="dark"] .nav-toggle { border-color: rgba(255,255,255,0.14); }
+  html[data-theme="dark"] .nav-toggle:hover { background: rgba(127,182,230,0.14); border-color: rgba(127,182,230,0.4); }
+  .nav-toggle-text { font-size:12px; font-weight:600; letter-spacing:.02em; min-width:38px; }
+  .nav-toggle .nav-toggle-ico { display:none; }
+  html:not([data-theme="dark"]) .nav-toggle .nav-toggle-ico[data-show-when="light"] { display:inline; }
+  html[data-theme="dark"] .nav-toggle .nav-toggle-ico[data-show-when="dark"] { display:inline; }
+  body[data-lang="en"] .nav-toggle .nav-toggle-ico[data-show-when="en"] { display:inline; }
+  body[data-lang="ar"] .nav-toggle .nav-toggle-ico[data-show-when="ar"] { display:inline; }
+
   /* Tweaks panel */
   .twk { position:fixed; right:20px; bottom:20px; z-index:100; width:300px; max-height:calc(100vh - 40px); background:var(--glass-bg); backdrop-filter: blur(20px) saturate(140%); border:1px solid var(--glass-line); border-radius:14px; box-shadow: 0 24px 60px rgba(0,0,0,.18); font-size:12.5px; color:var(--ink); overflow:hidden; display:none; flex-direction:column; }
   body[data-lang="ar"] .twk { right:auto; left:20px; }
@@ -373,6 +385,14 @@
         <a href="#contact" class="hover:text-knx-blue i18n" data-en="Contact" data-ar="تواصل">Contact</a>
       </div>
       <div class="flex items-center gap-2">
+        <button id="nav-theme" type="button" class="nav-toggle" aria-label="Toggle theme" title="Toggle theme">
+          <span class="nav-toggle-ico" data-show-when="light">☾</span>
+          <span class="nav-toggle-ico" data-show-when="dark">☀</span>
+        </button>
+        <button id="nav-lang" type="button" class="nav-toggle nav-toggle-text" aria-label="Toggle language" title="Toggle language">
+          <span class="nav-toggle-ico" data-show-when="en">ع</span>
+          <span class="nav-toggle-ico" data-show-when="ar">EN</span>
+        </button>
         <a href="admin.html" class="hidden sm:inline text-[12.5px] font-medium text-knx-gray-600 hover:text-knx-blue px-3 py-2 i18n" data-en="Member sign-in" data-ar="دخول الأعضاء">Member sign-in</a>
         <a href="#contact" class="btn-apply">
           <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
@@ -853,7 +873,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "motion": 0.9,
   "grain": 0.04,
   "spotlight": true,
-  "cursor": "default"
+  "cursor": "dot"
 }/*EDITMODE-END*/;
 
 /* === Apply tweaks to DOM === */
@@ -915,6 +935,14 @@ document.querySelectorAll('.twk-seg').forEach(seg => {
 });
 document.getElementById('motion').addEventListener('input', e => setTweak('motion', +e.target.value));
 document.getElementById('grain').addEventListener('input', e => setTweak('grain', +e.target.value));
+
+/* Navbar quick toggles */
+document.getElementById('nav-theme').addEventListener('click', () => {
+  setTweak('theme', tweaks.theme === 'dark' ? 'light' : 'dark');
+});
+document.getElementById('nav-lang').addEventListener('click', () => {
+  setTweak('lang', tweaks.lang === 'ar' ? 'en' : 'ar');
+});
 
 /* Panel show/hide */
 const panel = document.getElementById('twk');
@@ -983,9 +1011,9 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
     spot.style.setProperty('--cx', tx + 'px');
     spot.style.setProperty('--cy', ty + 'px');
-    // Far-edge spotlight: place at the OPPOSITE corner of the cursor
-    spot.style.setProperty('--fx', (window.innerWidth - tx) + 'px');
-    spot.style.setProperty('--fy', (window.innerHeight - ty) + 'px');
+    // Spotlight follows the cursor directly
+    spot.style.setProperty('--fx', tx + 'px');
+    spot.style.setProperty('--fy', ty + 'px');
     raf = requestAnimationFrame(loop);
   }
   document.addEventListener('mousemove', (e) => {
