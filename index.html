@@ -1069,24 +1069,27 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
   let tx = window.innerWidth/2, ty = window.innerHeight/2;
-  let dx = tx, dy = ty, rx = tx, ry = ty;
+  let rx = tx, ry = ty;
   let raf = null;
+  let idleStop = 0;
   function loop(){
-    // dot snaps directly to cursor; ring trails softly
-    dx = tx; dy = ty;
     rx += (tx - rx) * 0.22;
     ry += (ty - ry) * 0.22;
-    dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
+    dot.style.transform = `translate(${tx}px, ${ty}px) translate(-50%, -50%)`;
     ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
     spot.style.setProperty('--cx', tx + 'px');
     spot.style.setProperty('--cy', ty + 'px');
-    // Spotlight follows the cursor directly
     spot.style.setProperty('--fx', tx + 'px');
     spot.style.setProperty('--fy', ty + 'px');
+    // stop the loop once the trailing ring has settled
+    if (Math.abs(tx - rx) < 0.5 && Math.abs(ty - ry) < 0.5 && performance.now() > idleStop) {
+      raf = null; return;
+    }
     raf = requestAnimationFrame(loop);
   }
   document.addEventListener('mousemove', (e) => {
     tx = e.clientX; ty = e.clientY;
+    idleStop = performance.now() + 80;
     if (!raf) raf = requestAnimationFrame(loop);
   }, { passive: true });
   // hover state on interactive targets
@@ -1107,7 +1110,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     dot.style.opacity = '';
     ring.style.opacity = '';
   });
-  loop();
 })();
 
 /* === Credential card: mouse-interactive 3D tilt + holographic shine === */
@@ -1147,8 +1149,9 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   const canvas = document.getElementById('circuit');
   const ctx = canvas.getContext('2d');
   let w, h, dpr, nodes, edges, t = 0;
+  let raf = null, running = false, visible = true;
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const r = canvas.parentElement.getBoundingClientRect();
     w = r.width; h = r.height;
     canvas.width = w*dpr; canvas.height = h*dpr;
@@ -1158,16 +1161,18 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
   function layout() {
     nodes = [];
-    const cols = Math.max(8, Math.round(w/90));
-    const rows = Math.max(5, Math.round(h/90));
+    const cols = Math.max(6, Math.round(w/130));
+    const rows = Math.max(4, Math.round(h/130));
     const sx = w/cols, sy = h/rows;
     for (let r=0; r<=rows; r++) for (let c=0; c<=cols; c++) {
       nodes.push({ x: c*sx + (Math.random()-0.5)*sx*0.4, y: r*sy + (Math.random()-0.5)*sy*0.4, on: Math.random()<0.22, color: Math.random()<0.5 ? '#329C32' : '#0060A8' });
     }
     edges = [];
+    const maxDist2 = 150*150;
     for (let i=0; i<nodes.length; i++) for (let j=i+1; j<nodes.length; j++) {
       const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-      if (dx*dx + dy*dy < 130*130 && Math.random() < 0.32) edges.push({a:i, b:j, pulse: Math.random()<0.12 ? Math.random() : -1});
+      const d2 = dx*dx + dy*dy;
+      if (d2 < maxDist2 && Math.random() < 0.18) edges.push({a:i, b:j, pulse: Math.random()<0.08 ? Math.random() : -1});
     }
   }
   function draw() {
@@ -1175,10 +1180,15 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     const motion = +getComputedStyle(document.documentElement).getPropertyValue('--motion') || 1;
     ctx.clearRect(0,0,w,h);
     ctx.lineWidth = 1;
+    ctx.strokeStyle = dark ? 'rgba(255,255,255,0.08)' : 'rgba(160,160,160,0.20)';
+    ctx.beginPath();
     for (const e of edges) {
       const a = nodes[e.a], b = nodes[e.b];
-      ctx.strokeStyle = dark ? 'rgba(255,255,255,0.08)' : 'rgba(160,160,160,0.20)';
-      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+    }
+    ctx.stroke();
+    for (const e of edges) {
+      const a = nodes[e.a], b = nodes[e.b];
       if (e.pulse >= 0) {
         e.pulse += 0.008 * motion;
         if (e.pulse > 1) e.pulse = -Math.random()*2;
@@ -1191,20 +1201,48 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
         }
       } else if (Math.random() < 0.0012 * motion) e.pulse = 0;
     }
+    const nodeOff = dark ? 'rgba(255,255,255,0.16)' : 'rgba(160,160,160,0.40)';
     for (const n of nodes) {
       if (n.on) {
         const phase = (Math.sin(t*0.0018*motion + n.x*0.01)+1)/2;
         ctx.fillStyle = n.color + Math.round(50 + phase*100).toString(16).padStart(2,'0');
         ctx.beginPath(); ctx.arc(n.x,n.y,1.9,0,Math.PI*2); ctx.fill();
       } else {
-        ctx.fillStyle = dark ? 'rgba(255,255,255,0.16)' : 'rgba(160,160,160,0.40)';
+        ctx.fillStyle = nodeOff;
         ctx.beginPath(); ctx.arc(n.x,n.y,1,0,Math.PI*2); ctx.fill();
       }
     }
-    t += 16; requestAnimationFrame(draw);
+    t += 16;
+    if (running) raf = requestAnimationFrame(draw);
   }
+  function start() {
+    if (running) return;
+    running = true;
+    raf = requestAnimationFrame(draw);
+  }
+  function stop() {
+    running = false;
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+  window.__circuit = { start, stop };
   window.addEventListener('resize', resize);
-  resize(); draw();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (visible) start();
+  });
+  // Pause when hero is offscreen or hidden by the page router
+  const hero = canvas.closest('section');
+  if (hero && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        visible = e.isIntersecting && hero.offsetParent !== null;
+        if (visible && !document.hidden) start(); else stop();
+      }
+    }, { threshold: 0.01 });
+    io.observe(hero);
+  }
+  resize();
+  start();
 })();
 
 /* === Directory — Jordan members === */
@@ -1416,6 +1454,12 @@ document.addEventListener('mouseout', (e) => {
     document.querySelectorAll('.nav-tab').forEach(a => {
       a.classList.toggle('is-active', a.getAttribute('data-page') === target);
     });
+
+    // Pause expensive hero animations when the home page is hidden
+    if (window.__circuit) {
+      if (target === HOME_ID) window.__circuit.start();
+      else window.__circuit.stop();
+    }
 
     window.scrollTo(0, 0);
   }
