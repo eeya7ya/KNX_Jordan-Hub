@@ -1448,8 +1448,13 @@ document.addEventListener('mouseout', (e) => {
 
   function showPage(id) {
     const target = (!id || id === 'top' || id === HOME_ID) ? HOME_ID : id;
-    if (home) home.style.display = (target === HOME_ID) ? '' : 'none';
-    sections.forEach(sec => { sec.style.display = (sec.id === target) ? '' : 'none'; });
+    // Home page shows the full overview (hero + every section).
+    // A specific tab shows only that section in detail.
+    const showAll = (target === HOME_ID);
+    if (home) home.style.display = showAll ? '' : 'none';
+    sections.forEach(sec => {
+      sec.style.display = (showAll || sec.id === target) ? '' : 'none';
+    });
 
     document.querySelectorAll('.nav-tab').forEach(a => {
       a.classList.toggle('is-active', a.getAttribute('data-page') === target);
@@ -1457,7 +1462,7 @@ document.addEventListener('mouseout', (e) => {
 
     // Pause expensive hero animations when the home page is hidden
     if (window.__circuit) {
-      if (target === HOME_ID) window.__circuit.start();
+      if (showAll) window.__circuit.start();
       else window.__circuit.stop();
     }
 
