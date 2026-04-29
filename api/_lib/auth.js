@@ -113,7 +113,9 @@ export function testAuthEnabled() {
 export async function getCurrentUser(req) {
   const token = parseCookies(req)[SESSION_COOKIE];
   if (!token) return null;
-  if (testAuthEnabled() && token === TEST_TOKEN) return TEST_USER;
+  // Recognize the demo session even when a DB is configured so that fallback
+  // sign-ins remain logged in across requests.
+  if (token === TEST_TOKEN) return TEST_USER;
   const sql = getSql();
   if (!sql) return null;
   const tokenHash = await hashSessionToken(token);

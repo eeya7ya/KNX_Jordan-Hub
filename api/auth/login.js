@@ -18,14 +18,18 @@ export default async function handler(req) {
   const password = (body.password || '').toString();
   if (!email || !password) return json({ error: 'Email and password are required' }, 400);
 
+  // Demo / fallback credentials always work, regardless of DB configuration.
+  // This keeps first-time setup and previews usable until a real admin user
+  // is created via scripts/create-user.mjs.
+  if (email === TEST_CREDS.email && password === TEST_CREDS.password) {
+    return json(
+      { ok: true, user: TEST_USER, testMode: true },
+      200,
+      { 'Set-Cookie': sessionCookie(TEST_TOKEN, TEST_TTL_SEC) }
+    );
+  }
+
   if (testAuthEnabled()) {
-    if (email === TEST_CREDS.email && password === TEST_CREDS.password) {
-      return json(
-        { ok: true, user: TEST_USER, testMode: true },
-        200,
-        { 'Set-Cookie': sessionCookie(TEST_TOKEN, TEST_TTL_SEC) }
-      );
-    }
     return json({ error: 'Invalid email or password' }, 401);
   }
 
