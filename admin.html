@@ -156,15 +156,63 @@
     </div>
 
     <!-- Admin view -->
-    <div id="admin-panel" class="panel p-6 hidden">
-      <div class="flex items-center justify-between gap-3">
-        <h2 class="font-display font-semibold text-lg i18n" data-en="Membership applications" data-ar="طلبات العضوية">Membership applications</h2>
-        <button id="reload-apps" class="btn btn-ghost" type="button">
-          <span class="i18n" data-en="Refresh" data-ar="تحديث">Refresh</span>
-        </button>
+    <div id="admin-panel" class="hidden space-y-6">
+      <div class="panel p-6">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="font-display font-semibold text-lg i18n" data-en="Membership applications" data-ar="طلبات العضوية">Membership applications</h2>
+          <button id="reload-apps" class="btn btn-ghost" type="button">
+            <span class="i18n" data-en="Refresh" data-ar="تحديث">Refresh</span>
+          </button>
+        </div>
+        <div id="apps-list" class="mt-4 text-sm">
+          <div style="color: var(--muted);" class="i18n" data-en="Loading…" data-ar="جارٍ التحميل…">Loading…</div>
+        </div>
       </div>
-      <div id="apps-list" class="mt-4 text-sm">
-        <div style="color: var(--muted);" class="i18n" data-en="Loading…" data-ar="جارٍ التحميل…">Loading…</div>
+
+      <div class="panel p-6">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="font-display font-semibold text-lg i18n" data-en="Homepage event card" data-ar="بطاقة فعالية الصفحة الرئيسية">Homepage event card</h2>
+          <span class="pill pill-admin i18n" data-en="Live" data-ar="مباشر">Live</span>
+        </div>
+        <p class="text-sm mt-2" style="color: var(--muted);">
+          <span class="i18n" data-en="These values populate the featured event card on the public homepage." data-ar="تظهر هذه القيم في بطاقة الفعالية المميّزة على الصفحة الرئيسية.">These values populate the featured event card on the public homepage.</span>
+        </p>
+        <form id="event-form" class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4" novalidate>
+          <div class="sm:col-span-2">
+            <label class="label i18n" for="ev-title" data-en="Event title" data-ar="عنوان الفعالية">Event title</label>
+            <input id="ev-title" name="event_title" class="field" maxlength="200" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-date" data-en="Date / time" data-ar="التاريخ / الوقت">Date / time</label>
+            <input id="ev-date" name="event_date" class="field" placeholder="24 May 2026 · 10:00 AGT" maxlength="120" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-location" data-en="Location" data-ar="الموقع">Location</label>
+            <input id="ev-location" name="event_location" class="field" maxlength="200" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-format" data-en="Format" data-ar="الصيغة">Format</label>
+            <input id="ev-format" name="event_format" class="field" maxlength="120" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-capacity" data-en="Capacity" data-ar="السعة">Capacity</label>
+            <input id="ev-capacity" name="event_capacity" class="field" maxlength="120" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-status" data-en="Status" data-ar="الحالة">Status</label>
+            <input id="ev-status" name="event_status" class="field" maxlength="80" />
+          </div>
+          <div>
+            <label class="label i18n" for="ev-count" data-en="Live events this month" data-ar="عدد الفعاليات هذا الشهر">Live events this month</label>
+            <input id="ev-count" name="event_count_month" type="number" min="0" max="999" class="field" />
+          </div>
+          <div class="sm:col-span-2 flex items-center gap-3">
+            <button id="event-save" type="submit" class="btn btn-primary">
+              <span class="i18n" data-en="Save" data-ar="حفظ">Save</span>
+            </button>
+            <span id="event-msg" class="text-sm" style="color: var(--muted);"></span>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -291,6 +339,57 @@ async function loadApps() {
 
 document.getElementById('reload-apps').addEventListener('click', loadApps);
 
+const EVENT_FIELDS = ['event_title','event_date','event_location','event_format','event_capacity','event_status','event_count_month'];
+async function loadSiteSettings() {
+  try {
+    const r = await fetch('/api/site/settings', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const s = (data && data.settings) || {};
+    if (s.event_title    != null) document.getElementById('ev-title').value    = s.event_title;
+    if (s.event_date     != null) document.getElementById('ev-date').value     = s.event_date;
+    if (s.event_location != null) document.getElementById('ev-location').value = s.event_location;
+    if (s.event_format   != null) document.getElementById('ev-format').value   = s.event_format;
+    if (s.event_capacity != null) document.getElementById('ev-capacity').value = s.event_capacity;
+    if (s.event_status   != null) document.getElementById('ev-status').value   = s.event_status;
+    if (s.event_count_month != null) document.getElementById('ev-count').value = s.event_count_month;
+  } catch {}
+}
+
+document.getElementById('event-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('event-msg');
+  const btn = document.getElementById('event-save');
+  msg.textContent = '';
+  btn.disabled = true;
+  const payload = {};
+  for (const k of EVENT_FIELDS) {
+    const el = document.querySelector(`[name="${k}"]`);
+    if (el) payload[k] = el.value;
+  }
+  try {
+    const r = await fetch('/api/site/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify(payload),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      msg.textContent = data.error || (state.lang === 'ar' ? 'تعذّر الحفظ.' : 'Save failed.');
+      msg.style.color = '#B7260C';
+    } else {
+      msg.textContent = state.lang === 'ar' ? 'تم الحفظ.' : 'Saved.';
+      msg.style.color = 'var(--green)';
+    }
+  } catch {
+    msg.textContent = state.lang === 'ar' ? 'خطأ في الشبكة.' : 'Network error.';
+    msg.style.color = '#B7260C';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 document.getElementById('signin-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   signinError.textContent = '';
@@ -315,7 +414,7 @@ document.getElementById('signin-form').addEventListener('submit', async (e) => {
     }
     renderUser(data.user);
     show('dashboard');
-    if (data.user.role === 'admin') loadApps();
+    if (data.user.role === 'admin') { loadApps(); loadSiteSettings(); }
   } catch {
     signinError.textContent = state.lang === 'ar' ? 'خطأ في الشبكة.' : 'Network error.';
   } finally {
@@ -335,7 +434,7 @@ document.getElementById('signout-btn').addEventListener('click', async () => {
   if (user) {
     renderUser(user);
     show('dashboard');
-    if (user.role === 'admin') loadApps();
+    if (user.role === 'admin') { loadApps(); loadSiteSettings(); }
   } else {
     show('signin');
   }
