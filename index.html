@@ -1,0 +1,1286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KNX Jordan Club — The Society of Certified Building Automation Professionals in Jordan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      knx: { green:'#329C32','green-50':'#EAF6EA','green-700':'#247024',
+             blue:'#0060A8','blue-50':'#E5EFF7','blue-700':'#004A82',
+             gray:'#A0A0A0','gray-50':'#F4F4F4','gray-100':'#E6E6E6','gray-200':'#CFCFCF','gray-600':'#5C5C5C','gray-800':'#2A2A2A', ink:'#101418' }
+    },
+    fontFamily: { sans:['Inter','system-ui','sans-serif'], display:['Sora','system-ui','sans-serif'] },
+  }}}
+</script>
+<style>
+  :root {
+    --bg:#fff; --bg-alt:#F7F7F5; --ink:#101418; --ink-2:#2A2A2A; --muted:#5C5C5C;
+    --line:#E6E6E6; --line-2:#CFCFCF;
+    --glass-bg: rgba(255,255,255,0.62); --glass-line: rgba(160,160,160,0.22);
+    --grid: rgba(160,160,160,0.18);
+    --green:#329C32; --blue:#0060A8;
+    --motion: 1; --grain: .04;
+  }
+  html[data-theme="dark"] {
+    --bg:#070A0E; --bg-alt:#0E1218; --ink:#ECEFF3; --ink-2:#C9CED7; --muted:#8B95A3;
+    --line: rgba(255,255,255,0.10); --line-2: rgba(255,255,255,0.16);
+    --glass-bg: rgba(20,24,30,0.55); --glass-line: rgba(255,255,255,0.10);
+    --grid: rgba(255,255,255,0.06); --grain:.06;
+  }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); transition: background .35s ease, color .35s ease; }
+  body[data-lang="ar"] { font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif; }
+  .font-display { font-family:'Sora',system-ui,sans-serif; letter-spacing:-.01em; }
+  body[data-lang="ar"] .font-display { font-family:'IBM Plex Sans Arabic','Sora',system-ui,sans-serif; }
+  body[data-lang="ar"] .font-mono, body[data-lang="ar"] .font-mono * { font-family:'IBM Plex Sans Arabic','JetBrains Mono',monospace; }
+  [dir="rtl"] svg.flip-rtl { transform: scaleX(-1); }
+
+  /* Glass */
+  .glass { background:var(--glass-bg); backdrop-filter:blur(16px) saturate(140%); -webkit-backdrop-filter:blur(16px) saturate(140%); border:1px solid var(--glass-line); }
+
+  /* Theme bridges */
+  html[data-theme="dark"] .bg-white { background:#11161E !important; color:var(--ink); }
+  html[data-theme="dark"] .bg-knx-gray-50 { background:var(--bg-alt) !important; }
+  html[data-theme="dark"] .text-knx-gray-600 { color:var(--muted) !important; }
+  html[data-theme="dark"] .text-knx-gray-800 { color:var(--ink-2) !important; }
+  html[data-theme="dark"] .text-knx-ink { color:var(--ink) !important; }
+  html[data-theme="dark"] .border-knx-gray-200 { border-color: var(--line-2) !important; }
+  html[data-theme="dark"] .border-knx-gray-100 { border-color: var(--line) !important; }
+  html[data-theme="dark"] .bg-knx-gray-100 { background: rgba(255,255,255,0.07) !important; }
+  html[data-theme="dark"] .bg-knx-blue-50 { background: rgba(0,96,168,0.14) !important; }
+  html[data-theme="dark"] .bg-knx-green-50 { background: rgba(50,156,50,0.14) !important; }
+  html[data-theme="dark"] .field { background:var(--bg-alt); color:var(--ink); border-color:var(--line-2); }
+  html[data-theme="dark"] .btn-ghost { color:var(--ink); border-color:var(--line-2); background: transparent; }
+  html[data-theme="dark"] .lift:hover { box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  html[data-theme="dark"] header > div > nav { background: rgba(7,10,14,0.55) !important; }
+  /* Brand text recolor in dark */
+  html[data-theme="dark"] .text-knx-blue-700 { color:#7FB6E6 !important; }
+  html[data-theme="dark"] .text-knx-green-700 { color:#7CD487 !important; }
+  /* News card top blocks: switch out faded gradients in dark */
+  html[data-theme="dark"] .news-block { background: linear-gradient(135deg, rgba(0,96,168,.18), rgba(50,156,50,.18)) !important; }
+
+  /* Buttons */
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:10px; font-weight:600; font-size:14px; transition: transform .15s ease, box-shadow .2s ease, background .15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background:#0060A8; color:#fff; box-shadow: 0 6px 18px rgba(0,96,168,.28), inset 0 1px 0 rgba(255,255,255,.18); position:relative; overflow:hidden; }
+  .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s ease;}
+  .btn-primary:hover::after{transform:translateX(100%);}
+  .btn-primary:hover { background:#004A82; box-shadow: 0 10px 28px rgba(0,96,168,.45), inset 0 1px 0 rgba(255,255,255,.18); }
+  .btn-ghost { background: transparent; color: var(--ink); border:1px solid var(--line-2); }
+  .btn-ghost:hover { border-color:#0060A8; color:#0060A8; }
+  .btn-green { background:#329C32; color:#fff; box-shadow:0 6px 18px rgba(50,156,50,.28); }
+  .btn-green:hover { background:#247024; }
+  /* Bold Apply button (nav) — gradient, glow, arrow nudge */
+  .btn-apply { background: linear-gradient(135deg,#0060A8 0%, #329C32 100%); color:#fff; padding:9px 14px; border-radius:10px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px; box-shadow:0 6px 16px rgba(0,96,168,.35); position:relative; overflow:hidden; }
+  .btn-apply::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg,#329C32 0%, #0060A8 100%); opacity:0; transition: opacity .25s ease; }
+  .btn-apply:hover::before { opacity:1; }
+  .btn-apply > * { position:relative; z-index:1; }
+  .btn-apply:hover { transform: translateY(-1px); box-shadow:0 10px 24px rgba(50,156,50,.45); }
+  .btn-apply svg { transition: transform .25s ease; }
+  .btn-apply:hover svg { transform: translateX(3px); }
+
+  /* Field */
+  .field { width:100%; padding:12px 14px; border:1px solid var(--line-2); border-radius:10px; background:var(--bg); font-size:14px; color:var(--ink); transition: border .15s ease, box-shadow .15s ease; }
+  .field:focus { outline:none; border-color:#0060A8; box-shadow: 0 0 0 3px rgba(0,96,168,.15); }
+
+  /* Eyebrow + lifts */
+  .eyebrow { font-size:11px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; color:var(--muted); }
+  .eyebrow .dot { display:inline-block; width:6px; height:6px; border-radius:999px; background:var(--green); margin-right:8px; vertical-align:2px; }
+  .lift { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .lift:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(16,20,24,.08); border-color:#A0A0A0; }
+  .tier-popular { box-shadow: 0 20px 60px rgba(0,96,168,.18); }
+
+  /* Mouse-interactive credential card — soft, professional, no heavy borders */
+  .cred-wrap { perspective: 1400px; }
+  .cred-card {
+    position: relative;
+    padding: 28px;
+    border-radius: 20px;
+    background: var(--card-bg, #fff);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 30px 60px -20px rgba(16,20,24,0.18),
+      0 12px 24px -12px rgba(16,20,24,0.10);
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  html[data-theme="dark"] .cred-card {
+    background: linear-gradient(180deg, rgba(28,32,38,0.92), rgba(20,24,30,0.92));
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.04) inset,
+      0 40px 80px -20px rgba(0,0,0,0.55),
+      0 12px 28px -10px rgba(0,0,0,0.45);
+  }
+  .cred-card::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+      rgba(50,156,50,0.45) 0%,
+      rgba(160,160,160,0.18) 35%,
+      rgba(0,96,168,0.45) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity .3s ease;
+    z-index: 1;
+  }
+  .cred-card:hover::before { opacity: 1; }
+  .cred-shine {
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(420px circle at var(--mx) var(--my),
+      rgba(50,156,50,0.10) 0%,
+      rgba(0,96,168,0.07) 35%,
+      transparent 70%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: plus-lighter;
+  }
+  html[data-theme="dark"] .cred-shine {
+    background: radial-gradient(420px circle at var(--mx) var(--my),
+      rgba(50,156,50,0.18) 0%,
+      rgba(0,96,168,0.13) 35%,
+      transparent 70%);
+  }
+  .cred-card:hover .cred-shine { opacity: 1; }
+  .cred-card > *:not(.cred-shine) { position: relative; z-index: 3; }
+
+  .cred-field {
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: rgba(160,160,160,0.06);
+    transition: background .2s ease, transform .25s ease;
+  }
+  html[data-theme="dark"] .cred-field { background: rgba(255,255,255,0.04); }
+  .cred-card:hover .cred-field { transform: translateZ(8px); }
+  .cred-footer { border-top: 1px solid rgba(160,160,160,0.18); }
+  html[data-theme="dark"] .cred-footer { border-top-color: rgba(255,255,255,0.08); }
+
+  .cred-pill {
+    position: absolute;
+    z-index: 5;
+    background: var(--card-bg, #fff);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 12px 28px -8px rgba(16,20,24,0.18);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  html[data-theme="dark"] .cred-pill {
+    background: rgba(28,32,38,0.95);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.04) inset,
+      0 16px 32px -8px rgba(0,0,0,0.55);
+  }
+  .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+  @keyframes pulseDot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(50,156,50,0.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(50,156,50,0); }
+  }
+
+  .grid-pattern { background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size:56px 56px; }
+  .grid-pattern-dark { background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size:56px 56px; }
+
+  .clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  section[id] { scroll-margin-top: 80px; }
+
+  /* HERO BACKGROUND — much stronger now: animated grid, drifting blobs, and circuit canvas */
+  .hero { position:relative; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; pointer-events:none; }
+  .blob { position:absolute; filter: blur(80px); opacity:.55; mix-blend-mode: screen; will-change: transform; }
+  html:not([data-theme="dark"]) .blob { mix-blend-mode: multiply; opacity:.22; }
+  .blob.b1 { width:520px; height:520px; background: radial-gradient(circle, var(--green), transparent 70%); top:-160px; left:-120px; animation: float1 calc(22s / var(--motion)) ease-in-out infinite alternate; }
+  .blob.b2 { width:580px; height:580px; background: radial-gradient(circle, var(--blue), transparent 70%); bottom:-220px; right:-160px; animation: float2 calc(28s / var(--motion)) ease-in-out infinite alternate; }
+  .blob.b3 { width:380px; height:380px; background: radial-gradient(circle, #A0A0A0, transparent 70%); top:35%; left:55%; opacity:.12; animation: float3 calc(34s / var(--motion)) ease-in-out infinite alternate; }
+  @keyframes float1 { from{transform:translate(0,0) scale(1);} to{transform:translate(120px,80px) scale(1.15);} }
+  @keyframes float2 { from{transform:translate(0,0) scale(1.05);} to{transform:translate(-100px,-60px) scale(.95);} }
+  @keyframes float3 { from{transform:translate(0,0);} to{transform:translate(-60px,40px);} }
+
+  .grid-anim { position:absolute; inset:-2px; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size:48px 48px; mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, black, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, black, transparent 80%); animation: gridDrift calc(40s / var(--motion)) linear infinite; }
+  @keyframes gridDrift { from{background-position:0 0,0 0;} to{background-position:48px 48px, 48px 48px;} }
+
+  .scanlines { position:absolute; inset:0; background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(0,0,0,.015) 3px 4px); mix-blend-mode: multiply; }
+  html[data-theme="dark"] .scanlines { background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(255,255,255,.025) 3px 4px); mix-blend-mode: screen; }
+
+  /* Pulse dot */
+  @keyframes pulse-ring { 0% { transform: scale(.6); opacity:.8 } 80%,100% { transform:scale(1.6); opacity:0 } }
+  .pulse-dot { position:relative; }
+  .pulse-dot::after { content:''; position:absolute; inset:-2px; border-radius:999px; box-shadow:0 0 0 2px currentColor; animation: pulse-ring 2.4s ease-out infinite; }
+
+  /* Marquee */
+  @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  [dir="rtl"] @keyframes marquee { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+  .marquee-track { animation: marquee calc(40s / var(--motion)) linear infinite; }
+
+  /* Stats bar — richer */
+  .stat-card { position:relative; padding:18px 20px; border-radius:14px; background: var(--glass-bg); border:1px solid var(--glass-line); backdrop-filter: blur(14px); overflow:hidden; }
+  .stat-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: linear-gradient(180deg, var(--green), var(--blue)); }
+  .stat-num { font-family:'Sora',sans-serif; font-weight:800; font-size:34px; letter-spacing:-.02em; line-height:1; }
+  .stat-num .unit { font-size:18px; font-weight:600; color:var(--muted); margin-left:2px; }
+  .stat-label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+  .stat-spark { margin-top:10px; height:24px; }
+  .stat-trend { position:absolute; top:14px; right:14px; font-size:11px; font-weight:600; color:var(--green); display:inline-flex; align-items:center; gap:4px; padding:3px 7px; border-radius:999px; background: rgba(50,156,50,.10); }
+
+  /* Reveal on scroll */
+  .reveal { opacity:0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity:1; transform: none; }
+
+  /* Grain overlay (uniqueness) */
+  .grain::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:60; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.5'/></svg>"); opacity: var(--grain); mix-blend-mode: multiply; }
+  html[data-theme="dark"] .grain::after { mix-blend-mode: screen; }
+
+  /* === Global cursor-follow color spotlight === */
+  /* Spotlight sits at the FAR edge — opposite the cursor across the screen */
+  .cursor-spotlight {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background:
+      radial-gradient(420px circle at var(--fx, 100%) var(--fy, 100%),
+        rgba(0, 96, 168, 0.07) 0%,
+        transparent 65%);
+    transition: opacity .35s ease;
+    mix-blend-mode: multiply;
+    opacity: 1;
+  }
+  html[data-theme="dark"] .cursor-spotlight {
+    background:
+      radial-gradient(420px circle at var(--fx, 100%) var(--fy, 100%),
+        rgba(0, 96, 168, 0.13) 0%,
+        transparent 65%);
+    mix-blend-mode: screen;
+  }
+  body.no-cursor-fx .cursor-spotlight { opacity: 0; }
+
+  /* === Custom dot cursor === */
+  body.cursor-dot, body.cursor-dot * { cursor: none !important; }
+  .cursor-dot-el {
+    position: fixed;
+    top: 0; left: 0;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #329C32, #0060A8);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width .18s ease, height .18s ease, opacity .2s ease;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 14px rgba(0,96,168,0.45);
+  }
+  .cursor-dot-ring {
+    position: fixed;
+    top: 0; left: 0;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(50,156,50,0.55);
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width .2s ease, height .2s ease, border-color .2s ease, opacity .2s ease;
+  }
+  html[data-theme="dark"] .cursor-dot-ring { border-color: rgba(124,212,135,0.6); }
+  body:not(.cursor-dot) .cursor-dot-el,
+  body:not(.cursor-dot) .cursor-dot-ring { display: none; }
+  body.cursor-dot.cursor-hover .cursor-dot-el { width: 6px; height: 6px; }
+  body.cursor-dot.cursor-hover .cursor-dot-ring { width: 56px; height: 56px; border-color: rgba(0,96,168,0.7); }
+
+  /* Tweaks panel */
+  .twk { position:fixed; right:20px; bottom:20px; z-index:100; width:300px; max-height:calc(100vh - 40px); background:var(--glass-bg); backdrop-filter: blur(20px) saturate(140%); border:1px solid var(--glass-line); border-radius:14px; box-shadow: 0 24px 60px rgba(0,0,0,.18); font-size:12.5px; color:var(--ink); overflow:hidden; display:none; flex-direction:column; }
+  body[data-lang="ar"] .twk { right:auto; left:20px; }
+  .twk.open { display:flex; }
+  .twk-h { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--line); cursor:move; user-select:none; }
+  .twk-h b { font-family:'Sora',sans-serif; font-size:13px; }
+  .twk-x { width:24px; height:24px; border-radius:6px; border:0; background:transparent; color:var(--muted); cursor:pointer; }
+  .twk-x:hover { background: rgba(0,0,0,.06); color:var(--ink); }
+  .twk-body { padding:12px 14px; display:flex; flex-direction:column; gap:14px; overflow-y:auto; }
+  .twk-sec { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; padding-top:6px; border-top:1px solid var(--line); }
+  .twk-sec:first-child { padding-top:0; border-top:0; }
+  .twk-row { display:flex; flex-direction:column; gap:6px; }
+  .twk-lbl { display:flex; justify-content:space-between; align-items:baseline; font-weight:500; }
+  .twk-lbl small { color:var(--muted); font-weight:400; font-variant-numeric:tabular-nums; }
+  .twk-seg { display:flex; padding:3px; background: rgba(0,0,0,0.06); border-radius:9px; }
+  html[data-theme="dark"] .twk-seg { background: rgba(255,255,255,0.08); }
+  .twk-seg button { flex:1; border:0; background: transparent; padding:7px 4px; border-radius:7px; font-size:12px; color:var(--muted); cursor:pointer; font-weight:500; transition: all .2s ease; font-family: inherit; }
+  .twk-seg button.on { background: var(--bg); color:var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight:600; }
+  .twk-slider { width:100%; height:4px; -webkit-appearance:none; appearance:none; background: rgba(0,0,0,.12); border-radius:999px; outline:none; }
+  html[data-theme="dark"] .twk-slider { background: rgba(255,255,255,.15); }
+  .twk-slider::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background: linear-gradient(135deg,#0060A8,#329C32); border:2px solid var(--bg); cursor:pointer; }
+  .twk-swatches { display:flex; gap:6px; flex-wrap:wrap; }
+  .twk-sw { width:28px; height:28px; border-radius:8px; border:2px solid transparent; cursor:pointer; transition: all .15s; }
+  .twk-sw.on { border-color: var(--ink); transform: scale(1.05); }
+  .twk-fab { position:fixed; right:20px; bottom:20px; z-index:99; width:48px; height:48px; border-radius:14px; background: linear-gradient(135deg,#0060A8,#329C32); color:#fff; border:0; cursor:pointer; box-shadow:0 10px 24px rgba(0,96,168,.35); display:flex; align-items:center; justify-content:center; transition: transform .2s; }
+  body[data-lang="ar"] .twk-fab { right:auto; left:20px; }
+  .twk-fab:hover { transform: scale(1.08) rotate(15deg); }
+
+  /* Mobile responsive directory */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 44px !important; }
+  }
+
+  /* Vibe presets — 3 expressive visual modes */
+  body[data-vibe="institutional"] { /* default */ }
+  body[data-vibe="editorial"] .font-display { font-family: 'Sora', serif; font-weight:700; letter-spacing:-.025em; }
+  body[data-vibe="editorial"] h1, body[data-vibe="editorial"] h2 { font-style: italic; font-weight: 800; }
+  body[data-vibe="editorial"] .blob { opacity: .35; }
+  body[data-vibe="technical"] .font-display { font-family: 'JetBrains Mono', monospace; font-weight:600; letter-spacing:0; }
+  body[data-vibe="technical"] h1 { text-transform: uppercase; font-size: 56px !important; }
+  body[data-vibe="technical"] .stat-num { font-family: 'JetBrains Mono', monospace; font-weight:600; }
+  body[data-vibe="technical"] .grain::after { opacity: 0; }
+
+  /* Density */
+  body[data-density="airy"] section.py-28 { padding-top:140px; padding-bottom:140px; }
+  body[data-density="compact"] section.py-28 { padding-top:72px; padding-bottom:72px; }
+</style>
+</head>
+<body class="antialiased grain" data-vibe="institutional" data-density="regular" data-lang="en">
+
+<!-- Global cursor-follow color spotlight -->
+<div class="cursor-spotlight" id="cursor-spotlight" aria-hidden="true"></div>
+<!-- Custom dot cursor -->
+<div class="cursor-dot-ring" id="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot-el" id="cursor-dot" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header id="top" class="fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 mt-3">
+    <nav class="glass rounded-xl px-4 sm:px-5 py-3 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3">
+        <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto" />
+        <span class="font-display font-bold text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
+        <span class="hidden xl:inline whitespace-nowrap text-[11px] text-knx-gray-600 border-l border-knx-gray-200 ps-3 ms-1 i18n" data-en="AMMAN · EST. 2014" data-ar="عمّان · تأسّس 2014">AMMAN · EST. 2014</span>
+      </a>
+      <div class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium text-knx-gray-800">
+        <a href="#about" class="hover:text-knx-blue i18n" data-en="About" data-ar="من نحن">About</a>
+        <a href="#membership" class="hover:text-knx-blue i18n" data-en="Membership" data-ar="العضوية">Membership</a>
+        <a href="#directory" class="hover:text-knx-blue i18n" data-en="Directory" data-ar="الدليل">Directory</a>
+        <a href="#events" class="hover:text-knx-blue i18n" data-en="Events" data-ar="الفعاليات">Events</a>
+        <a href="#news" class="hover:text-knx-blue i18n" data-en="News" data-ar="الأخبار">News</a>
+        <a href="#contact" class="hover:text-knx-blue i18n" data-en="Contact" data-ar="تواصل">Contact</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="admin.html" class="hidden sm:inline text-[12.5px] font-medium text-knx-gray-600 hover:text-knx-blue px-3 py-2 i18n" data-en="Member sign-in" data-ar="دخول الأعضاء">Member sign-in</a>
+        <a href="#contact" class="btn-apply">
+          <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
+          <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero pt-36 pb-28" style="font-family: Sora">
+  <div class="hero-bg">
+    <div class="grid-anim"></div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <canvas id="circuit" style="position:absolute; inset:0; width:100%; height:100%;"></canvas>
+    <div class="scanlines"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-7" id="hero-copy">
+        <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 mb-6">
+          <span class="w-2 h-2 rounded-full bg-knx-green pulse-dot text-knx-green"></span>
+          <span class="text-[11.5px] font-semibold tracking-wide i18n" data-en="AMMAN CHAPTER · 2026 INTAKE OPEN" data-ar="فرع عمّان · فتح القبول 2026">AMMAN CHAPTER · 2026 INTAKE OPEN</span>
+          <span class="text-[11.5px] text-knx-gray-600 i18n" data-en="· 312 members across the Kingdom" data-ar="· 312 عضواً في المملكة">· 312 members across the Kingdom</span>
+        </div>
+        <h1 class="font-display font-extrabold text-5xl md:text-6xl lg:text-[78px] leading-[1.04] tracking-[-0.025em] text-balance i18n" style="font-family: Menlo;" data-en-html='Jordan&rsquo;s home for <span class="text-knx-green">certified</span><br />smart-building <span class="text-knx-blue">specialists</span>.' data-ar-html='منزل <span class="text-knx-green">مختصّي</span> المباني الذكية<br /><span class="text-knx-blue">المعتمدين</span> في الأردن.'>
+          Jordan&rsquo;s home for <span class="text-knx-green">certified</span><br />smart-building <span class="text-knx-blue">specialists</span>.
+        </h1>
+        <p class="mt-7 text-[17px] text-knx-gray-600 max-w-xl leading-relaxed i18n" data-en="An independent, member-led society headquartered in Amman — connecting Jordan&rsquo;s integrators, consultants and educators who design and commission KNX systems for the region&rsquo;s homes, offices and public buildings." data-ar="جمعيّة مستقلة يقودها أعضاؤها ومقرّها عمّان — تجمع مكامِلي ومستشاري ومدرّبي أنظمة KNX في الأردن، الذين يصمّمون ويُسلّمون أنظمة المباني الذكية للمنازل والمكاتب والمباني العامة في المنطقة.">
+          An independent, member-led society headquartered in Amman — connecting Jordan&rsquo;s integrators, consultants and educators who design and commission KNX systems for the region&rsquo;s homes, offices and public buildings.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a href="#membership" class="btn btn-primary">
+            <span class="i18n" data-en="Become a member" data-ar="انضم إلى النادي">Become a member</span>
+            <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#directory" class="btn btn-ghost i18n" data-en="Browse directory" data-ar="تصفح الدليل">Browse directory</a>
+        </div>
+      </div>
+
+      <!-- Right: floating credential card -->
+      <div class="lg:col-span-5 lg:mt-20">
+        <div class="relative cred-wrap" id="cred-wrap">
+          <div class="absolute -inset-6 bg-gradient-to-br from-knx-green/10 via-transparent to-knx-blue/10 rounded-3xl blur-3xl"></div>
+          <div class="relative cred-card" id="cred-card" style="--mx:50%; --my:50%;">
+            <div class="cred-shine"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-[11px] uppercase tracking-widest text-knx-gray-600">
+                <span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span>
+                <span class="i18n" data-en="Verified credential" data-ar="شهادة موثّقة">Verified credential</span>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-knx-green to-knx-blue flex items-center justify-center text-white font-display font-bold text-xl shadow-lg" style="transform: translateZ(20px);">MA</div>
+              <div>
+                <div class="font-display font-semibold text-[17px] i18n" data-en="Marwa Al-Habashneh" data-ar="مروة الحباشنة">Marwa Al-Habashneh</div>
+                <div class="text-[12.5px] text-knx-gray-600 i18n" data-en="KNX Tutor · Amman · Senior Integrator" data-ar="مدرّبة معتمدة · عمّان · مكاملة أنظمة">KNX Tutor · Amman · Senior Integrator</div>
+              </div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-3 text-[12px]">
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Tier" data-ar="الفئة">Tier</div><div class="font-semibold mt-1 i18n" data-en="Professional" data-ar="محترف">Professional</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Since" data-ar="منذ">Since</div><div class="font-semibold mt-1 i18n" data-en="Mar 2024" data-ar="مارس 2024">Mar 2024</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Projects" data-ar="المشاريع">Projects</div><div class="font-semibold mt-1 i18n" data-en="87 commissioned" data-ar="87 مُسلّماً">87 commissioned</div></div>
+              <div class="cred-field"><div class="text-knx-gray-600 uppercase tracking-wider text-[10.5px] i18n" data-en="Status" data-ar="الحالة">Status</div><div class="font-semibold mt-1 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span> <span class="i18n" data-en="Active" data-ar="نشط">Active</span></div></div>
+            </div>
+            <div class="mt-5 pt-4 cred-footer flex items-center justify-between">
+              <span class="text-[10.5px] font-mono text-knx-gray-600 i18n" data-en="Valid · 31 Dec 2026" data-ar="ساري · 31 ديسمبر 2026">Valid · 31 Dec 2026</span>
+              <div class="flex items-center gap-2"><img src="assets/knx-logo.png" alt="KNX" class="h-4 w-auto" /><span class="font-display font-bold text-[12px] tracking-tight text-knx-gray-600 i18n" data-en="/ Jordan Club" data-ar="/ نادي الأردن">/ Jordan Club</span></div>
+            </div>
+          </div>
+
+          <div class="absolute -left-5 -bottom-5 cred-pill hidden md:flex items-center gap-3"><div class="w-9 h-9 rounded-md bg-knx-green-50 flex items-center justify-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#329C32" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="text-[12px] font-semibold i18n" data-en="ETS6 certified" data-ar="معتمد ETS6">ETS6 certified</div><div class="text-[10.5px] text-knx-gray-600 i18n" data-en="Renewed 12 days ago" data-ar="جُدّد قبل 12 يوماً">Renewed 12 days ago</div></div></div>
+          <div class="absolute -right-3 -top-5 cred-pill hidden md:block"><div class="text-[10.5px] uppercase tracking-widest text-knx-gray-600 i18n" data-en="Live" data-ar="مباشر">Live</div><div class="text-[13px] font-display font-semibold i18n" data-en="7 events this month" data-ar="7 فعاليات هذا الشهر">7 events this month</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-width stat strip — spans hero bottom -->
+    <div class="mt-16 glass rounded-2xl p-6 md:p-7" id="stat-strip">
+      <div class="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
+        <div class="md:col-span-5 grid grid-cols-3 divide-x divide-[var(--line)]">
+          <div class="pe-5">
+            <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Members" data-ar="الأعضاء">Members</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <div class="font-display font-bold text-3xl"><span data-count="312" class="counter">0</span></div>
+              <span class="text-[11px] font-semibold text-knx-green">▲ 18 ytd</span>
+            </div>
+          </div>
+          <div class="px-5">
+            <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Governorates" data-ar="المحافظات">Governorates</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <div class="font-display font-bold text-3xl"><span data-count="9" class="counter">0</span><span class="text-knx-gray-600 text-xl">/12</span></div>
+            </div>
+          </div>
+          <div class="ps-5">
+            <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Renewal" data-ar="التجديد">Renewal</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <div class="font-display font-bold text-3xl"><span data-count="96" class="counter">0</span><span class="text-knx-gray-600 text-xl">%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-7 md:border-l md:ps-8 md:border-[var(--line)]">
+          <div class="flex items-center justify-between text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600">
+            <span class="i18n" data-en="Members joined · last 12 months" data-ar="انضموا · آخر 12 شهراً">Members joined · last 12 months</span>
+            <span id="spark-readout" class="font-mono normal-case tracking-normal">hover months</span>
+          </div>
+          <svg id="hero-spark" class="mt-2 w-full h-16" viewBox="0 0 480 64" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative mt-24 border-y" style="border-color:var(--line-2); background:var(--bg-alt);">
+    <div class="overflow-hidden py-5">
+      <div class="marquee-track flex items-center gap-12 whitespace-nowrap text-[13px] uppercase tracking-[0.18em] font-medium" style="width: max-content; color: var(--ink-2);">
+        <span>Helios Integrations · Amman</span><span class="text-knx-green">●</span><span>Royal Smart Homes</span><span class="text-knx-blue">●</span><span>Amman Automation Co.</span><span class="text-knx-green">●</span><span>Meridian Controls JO</span><span class="text-knx-blue">●</span><span>Petra Engineering</span><span class="text-knx-green">●</span><span>Aqaba Smart Buildings</span><span class="text-knx-blue">●</span><span>Lumen JO</span><span class="text-knx-green">●</span><span>Irbid Integrators</span><span class="text-knx-blue">●</span><span>Cobalt Labs MENA</span><span class="text-knx-green">●</span>
+        <span>Helios Integrations · Amman</span><span class="text-knx-green">●</span><span>Royal Smart Homes</span><span class="text-knx-blue">●</span><span>Amman Automation Co.</span><span class="text-knx-green">●</span><span>Meridian Controls JO</span><span class="text-knx-blue">●</span><span>Petra Engineering</span><span class="text-knx-green">●</span><span>Aqaba Smart Buildings</span><span class="text-knx-blue">●</span><span>Lumen JO</span><span class="text-knx-green">●</span><span>Irbid Integrators</span><span class="text-knx-blue">●</span><span>Cobalt Labs MENA</span><span class="text-knx-green">●</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-28">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-12 gap-12 items-start">
+      <div class="lg:col-span-5 reveal">
+        <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="About the club" data-ar="عن النادي">About the club</span></div>
+        <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en-html="Built in Amman.<br />By the people who<br />build the buildings." data-ar-html="بُني في عمّان.<br />على يد من يبنون<br />المباني.">Built in Amman.<br />By the people who<br />build the buildings.</h2>
+        <p class="mt-6 text-[16px] text-knx-gray-600 leading-relaxed i18n" data-en="KNX Jordan Club is a peer-elected society of certified integrators, consultants and educators working across the Kingdom. We don&rsquo;t sell hardware and we don&rsquo;t speak for any manufacturer — members govern the bylaws, set the certification ladder, and review every applicant by hand." data-ar="نادي KNX الأردن جمعيّة يُنتخب مجلسها من بين أعضائها من المكاملين والمستشارين والمدرّبين المعتمدين في المملكة. لا نبيع أجهزة، ولا نتحدّث باسم أي مُصنِّع — الأعضاء يضعون النظام الداخلي، ويحدّدون سلّم الشهادات، ويراجعون كل طلب يدوياً.">KNX Jordan Club is a peer-elected society of certified integrators, consultants and educators working across the Kingdom. We don&rsquo;t sell hardware and we don&rsquo;t speak for any manufacturer — members govern the bylaws, set the certification ladder, and review every applicant by hand.</p>
+        <div class="mt-8 flex items-center gap-6">
+          <div><div class="font-display font-bold text-3xl text-knx-green">2014</div><div class="text-[12px] uppercase tracking-wider text-knx-gray-600 i18n" data-en="Founded · Amman" data-ar="تأسّس · عمّان">Founded · Amman</div></div>
+          <div class="w-px h-10 bg-knx-gray-200"></div>
+          <div><div class="font-display font-bold text-3xl text-knx-blue">9</div><div class="text-[12px] uppercase tracking-wider text-knx-gray-600 i18n" data-en="Board members" data-ar="أعضاء المجلس">Board members</div></div>
+          <div class="w-px h-10 bg-knx-gray-200"></div>
+          <div><div class="font-display font-bold text-3xl i18n" data-en="Non-profit" data-ar="غير ربحية">Non-profit</div><div class="text-[12px] uppercase tracking-wider text-knx-gray-600 i18n" data-en="Reg. JO-2014/318" data-ar="سجل JO-2014/318">Reg. JO-2014/318</div></div>
+        </div>
+      </div>
+      <div class="lg:col-span-7 reveal">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="rounded-xl border border-knx-gray-200 p-6 lift bg-white">
+            <div class="w-10 h-10 rounded-lg bg-knx-green-50 flex items-center justify-center mb-5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#329C32" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></div>
+            <h3 class="font-display font-semibold text-lg i18n" data-en="Peer review, not pay-to-play" data-ar="مراجعة الأقران، لا الدفع مقابل الانضمام">Peer review, not pay-to-play</h3>
+            <p class="mt-2 text-[14px] text-knx-gray-600 leading-relaxed i18n" data-en="Every application is reviewed by three sitting members. References are checked. Project work is sampled." data-ar="يُراجَع كل طلب من قِبل ثلاثة أعضاء نشطين. تُتحقّق المراجع، وتُختبَر عيّنة من الأعمال.">Every application is reviewed by three sitting members. References are checked. Project work is sampled.</p>
+          </div>
+          <div class="rounded-xl border border-knx-gray-200 p-6 lift bg-white">
+            <div class="w-10 h-10 rounded-lg bg-knx-blue-50 flex items-center justify-center mb-5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0060A8" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg></div>
+            <h3 class="font-display font-semibold text-lg i18n" data-en="Vendor-neutral by charter" data-ar="حياد المورّدين بموجب الميثاق">Vendor-neutral by charter</h3>
+            <p class="mt-2 text-[14px] text-knx-gray-600 leading-relaxed i18n" data-en="No single manufacturer holds more than 4% of voting weight. Sponsorship is published quarterly." data-ar="لا يحقّ لأي مُصنِّع امتلاك أكثر من 4٪ من وزن التصويت. وتُنشَر الرعايات فصلياً.">No single manufacturer holds more than 4% of voting weight. Sponsorship is published quarterly.</p>
+          </div>
+          <div class="rounded-xl border border-knx-gray-200 p-6 lift bg-white">
+            <div class="w-10 h-10 rounded-lg bg-knx-green-50 flex items-center justify-center mb-5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#329C32" stroke-width="2"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></div>
+            <h3 class="font-display font-semibold text-lg i18n" data-en="A standing certification ladder" data-ar="سلّم اعتماد ثابت">A standing certification ladder</h3>
+            <p class="mt-2 text-[14px] text-knx-gray-600 leading-relaxed i18n" data-en="Apprentice · Practitioner · Professional · Tutor · Fellow. Continuing-education credits required annually." data-ar="متدرّب · ممارس · محترف · مدرّب · زميل. تُشترط ساعات تعليم مستمر سنوياً.">Apprentice · Practitioner · Professional · Tutor · Fellow. Continuing-education credits required annually.</p>
+          </div>
+          <div class="rounded-xl border border-knx-gray-200 p-6 lift bg-white">
+            <div class="w-10 h-10 rounded-lg bg-knx-blue-50 flex items-center justify-center mb-5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0060A8" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <h3 class="font-display font-semibold text-lg i18n" data-en="Local chapters, global standards" data-ar="فروع محلّية، معايير عالمية">Local chapters, global standards</h3>
+            <p class="mt-2 text-[14px] text-knx-gray-600 leading-relaxed i18n" data-en="42 chapters meet monthly. The board ratifies a single global handbook every two years." data-ar="42 فرعاً يجتمع شهرياً. يُصادِق المجلس على دليل عالمي واحد كل عامَين.">42 chapters meet monthly. The board ratifies a single global handbook every two years.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP TIERS -->
+<section id="membership" class="py-28 bg-knx-gray-50 relative">
+  <div class="absolute inset-0 grid-pattern opacity-50 pointer-events-none"></div>
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 reveal">
+      <div>
+        <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="Membership tiers" data-ar="فئات العضوية">Membership tiers</span></div>
+        <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="Five tiers. One ladder." data-ar="خمس فئات. سلّمٌ واحد.">Five tiers. One ladder.</h2>
+        <p class="mt-4 text-[16px] text-knx-gray-600 max-w-xl i18n" data-en="We&rsquo;re a non-profit — there are no membership fees. You move up by submitting commissioned work and passing peer review. What changes between tiers is what you can vote on, teach, and certify." data-ar="نحن جمعيّة غير ربحية — لا توجد رسوم عضوية. ترتقي بإرسال أعمالك المُسلّمة واجتيازك مراجعة الأقران. ما يتغيّر بين الفئات هو ما يمكنك التصويت عليه وتدريسه ومنح شهاداته.">We&rsquo;re a non-profit — there are no membership fees. You move up by submitting commissioned work and passing peer review. What changes between tiers is what you can vote on, teach, and certify.</p>
+      </div>
+      <div class="flex items-center gap-2 text-[11.5px] uppercase tracking-[0.16em] text-knx-green font-semibold" style="display:none;">
+        <span class="w-1.5 h-1.5 rounded-full bg-knx-green pulse-dot"></span>
+        <span class="i18n" data-en="Volunteer-run · No fees" data-ar="تطوّعي · بلا رسوم">Volunteer-run · No fees</span>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
+        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 01</div>
+        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Apprentice" data-ar="متدرّب">Apprentice</h3>
+        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="For students and trainees enrolled at a recognised KNX training centre." data-ar="للطلاب والمتدرّبين في مراكز تدريب KNX المعتمدة.">For students and trainees enrolled at a recognised KNX training centre.</p>
+        <div class="mt-6 pt-6 border-t border-knx-gray-200">
+          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
+          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="Active enrolment letter" data-ar="إفادة التسجيل الفعّال">Active enrolment letter</div>
+        </div>
+        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
+      </div>
+      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
+        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 02</div>
+        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Practitioner" data-ar="ممارس">Practitioner</h3>
+        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Working integrators with at least one commissioned project on record." data-ar="مكاملو أنظمة عاملون لديهم مشروع مُسلّم واحد على الأقل.">Working integrators with at least one commissioned project on record.</p>
+        <div class="mt-6 pt-6 border-t border-knx-gray-200">
+          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
+          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="1 commissioned project" data-ar="مشروع مُسلّم واحد">1 commissioned project</div>
+        </div>
+        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
+      </div>
+      <div class="rounded-2xl bg-white border-2 border-knx-blue p-6 lift flex flex-col h-full tier-popular relative">
+        <span class="absolute -top-3 left-6 bg-knx-blue text-white text-[10.5px] font-semibold tracking-wider uppercase px-2.5 py-1 rounded i18n" data-en="Most members" data-ar="الأكثر شيوعاً">Most members</span>
+        <div class="text-[11px] uppercase tracking-widest text-knx-blue">Tier 03</div>
+        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Professional" data-ar="محترف">Professional</h3>
+        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Senior integrators and system designers with five or more references." data-ar="مكاملون ومصممون كبار لديهم خمس مراجع أو أكثر.">Senior integrators and system designers with five or more references.</p>
+        <div class="mt-6 pt-6 border-t border-knx-blue/25">
+          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-blue i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
+          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="5+ references · peer review" data-ar="5+ مراجع · مراجعة أقران">5+ references · peer review</div>
+        </div>
+        <a href="#contact" class="btn btn-primary mt-6 justify-center i18n" data-en="Apply" data-ar="قدّم طلباً">Apply</a>
+      </div>
+      <div class="rounded-2xl bg-white border border-knx-gray-200 p-6 lift flex flex-col h-full">
+        <div class="text-[11px] uppercase tracking-widest text-knx-gray-600">Tier 04 / 05</div>
+        <h3 class="font-display font-bold text-2xl mt-1 i18n" data-en="Tutor &amp; Fellow" data-ar="مدرّب وزميل">Tutor &amp; Fellow</h3>
+        <p class="mt-2 text-[13.5px] text-knx-gray-600 leading-relaxed grow i18n" data-en="Educators, examiners, and elected fellows. Promotion is by board nomination only." data-ar="معلّمون وممتحنون وزملاء منتخبون. الترقية بترشيح المجلس فقط.">Educators, examiners, and elected fellows. Promotion is by board nomination only.</p>
+        <div class="mt-6 pt-6 border-t border-knx-gray-200">
+          <div class="text-[10.5px] uppercase tracking-[0.16em] text-knx-gray-600 i18n" data-en="Requirement" data-ar="الشرط">Requirement</div>
+          <div class="font-display font-semibold text-[15px] mt-1 i18n" data-en="Board nomination" data-ar="ترشيح المجلس">Board nomination</div>
+        </div>
+        <a href="#contact" class="btn btn-ghost mt-6 justify-center i18n" data-en="Nominate" data-ar="رشّح">Nominate</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTORY -->
+<section id="directory" class="py-28">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 reveal">
+      <div>
+        <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="Member directory" data-ar="دليل الأعضاء">Member directory</span></div>
+        <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="A searchable network of verified specialists." data-ar="شبكة قابلة للبحث من المختصين الموثّقين.">A searchable network of verified specialists.</h2>
+      </div>
+      <div class="relative">
+        <input id="dir-search" placeholder="Search…" class="field !w-72" />
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A0A0A0" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </div>
+    </div>
+    <div id="directory-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events" class="py-28 bg-knx-ink text-white relative overflow-hidden" style="background:#0B0E12;">
+  <div class="absolute inset-0 grid-pattern-dark opacity-50 pointer-events-none"></div>
+  <div class="absolute -left-20 top-1/3 w-96 h-96 rounded-full bg-knx-blue/20 blur-3xl pointer-events-none"></div>
+  <div class="absolute -right-20 bottom-0 w-96 h-96 rounded-full bg-knx-green/15 blur-3xl pointer-events-none"></div>
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="mb-12">
+      <div class="eyebrow text-white/70"><span class="dot"></span><span class="i18n" data-en="Events & training" data-ar="الفعاليات والتدريب">Events & training</span></div>
+      <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="Spring & summer 2026 calendar." data-ar="جدول الربيع والصيف 2026.">Spring & summer 2026 calendar.</h2>
+    </div>
+    <div class="grid lg:grid-cols-3 gap-4">
+      <article class="lg:col-span-2 glass rounded-2xl overflow-hidden lift" style="background:rgba(20,24,30,.55);border:1px solid rgba(255,255,255,.10);">
+        <div class="relative h-56 bg-gradient-to-br from-knx-blue to-knx-green flex items-end p-6">
+          <div class="relative">
+            <div class="text-[12px] uppercase tracking-widest opacity-90 i18n" data-en="14 — 16 May 2026 · Vienna" data-ar="14–16 مايو 2026 · فيينا">14 — 16 May 2026 · Vienna</div>
+            <div class="mt-1 font-display font-bold text-3xl i18n" data-en="Open Standards, Closed Loops" data-ar="معايير مفتوحة، حلقات مُغلقة">Open Standards, Closed Loops</div>
+          </div>
+        </div>
+        <div class="p-6">
+          <p class="text-[14.5px] text-white/75 leading-relaxed i18n" data-en="Three days of practitioner talks on commissioning, cybersecurity in IP/secure mode, and the next revision of the global handbook." data-ar="ثلاثة أيام من جلسات المختصين حول التسليم، والأمن السيبراني في وضع IP/secure، والمراجعة المقبلة للدليل العالمي.">Three days of practitioner talks on commissioning, cybersecurity in IP/secure mode, and the next revision of the global handbook.</p>
+        </div>
+      </article>
+      <div class="space-y-4">
+        <article class="rounded-2xl p-5 lift" style="background:rgba(20,24,30,.55);border:1px solid rgba(255,255,255,.10);">
+          <div class="flex items-center justify-between text-[11px] uppercase tracking-widest text-white/60"><span class="i18n" data-en="Workshop" data-ar="ورشة عمل">Workshop</span><span>02 Apr</span></div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="ETS6 deep-dive: secure commissioning patterns" data-ar="ETS6: أنماط التسليم الآمن">ETS6 deep-dive: secure commissioning patterns</h3>
+        </article>
+        <article class="rounded-2xl p-5 lift" style="background:rgba(20,24,30,.55);border:1px solid rgba(255,255,255,.10);">
+          <div class="flex items-center justify-between text-[11px] uppercase tracking-widest text-white/60"><span class="i18n" data-en="Chapter meet" data-ar="لقاء فرع">Chapter meet</span><span>11 Apr</span></div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="Lisbon chapter: facade-integrated lighting" data-ar="فرع لشبونة: الإضاءة المتكاملة في الواجهات">Lisbon chapter: facade-integrated lighting</h3>
+        </article>
+        <article class="rounded-2xl p-5 lift" style="background:rgba(20,24,30,.55);border:1px solid rgba(255,255,255,.10);">
+          <div class="flex items-center justify-between text-[11px] uppercase tracking-widest text-white/60"><span class="i18n" data-en="Examination" data-ar="امتحان">Examination</span><span>26 Apr</span></div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="Practitioner → Professional review board" data-ar="لجنة مراجعة: ممارس ← محترف">Practitioner → Professional review board</h3>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news" class="py-28">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="mb-12 reveal">
+      <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="News & updates" data-ar="الأخبار والتحديثات">News & updates</span></div>
+      <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="From the floor." data-ar="من قاعة الأعضاء.">From the floor.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4">
+      <article class="rounded-2xl border border-knx-gray-200 overflow-hidden lift bg-white">
+        <div class="news-block h-44 bg-gradient-to-br from-knx-blue-50 via-white to-knx-green-50 relative">
+          <div class="absolute inset-0 grid-pattern opacity-50"></div>
+          <span class="absolute top-4 left-4 bg-white text-knx-blue text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded i18n" data-en="Bylaw revision" data-ar="تعديل النظام">Bylaw revision</span>
+        </div>
+        <div class="p-5">
+          <div class="text-[11.5px] uppercase tracking-widest text-knx-gray-600">22 Apr 2026 · 4 min</div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="Ratified: §4.3 expands the apprenticeship clock to 36 months" data-ar="إقرار: المادة 4-3 تمدّ فترة التدرّب إلى 36 شهراً">Ratified: §4.3 expands the apprenticeship clock to 36 months</h3>
+        </div>
+      </article>
+      <article class="rounded-2xl border border-knx-gray-200 overflow-hidden lift bg-white">
+        <div class="news-block h-44 bg-gradient-to-br from-knx-green-50 via-white to-knx-blue-50 relative">
+          <div class="absolute inset-0 grid-pattern opacity-50"></div>
+          <span class="absolute top-4 left-4 bg-white text-knx-green text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded i18n" data-en="Field report" data-ar="تقرير ميداني">Field report</span>
+        </div>
+        <div class="p-5">
+          <div class="text-[11.5px] uppercase tracking-widest text-knx-gray-600">15 Apr 2026 · 9 min</div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="A 312-circuit retrofit at the Maartens Library, Antwerp" data-ar="ترميم 312 دارة في مكتبة مارتنز، أنتويرب">A 312-circuit retrofit at the Maartens Library, Antwerp</h3>
+        </div>
+      </article>
+      <article class="rounded-2xl border border-knx-gray-200 overflow-hidden lift bg-white">
+        <div class="news-block h-44 bg-gradient-to-br from-white via-knx-gray-50 to-knx-gray-100 relative">
+          <div class="absolute inset-0 grid-pattern opacity-50"></div>
+          <span class="absolute top-4 left-4 bg-white text-knx-gray-800 text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded i18n" data-en="Treasury" data-ar="الخزينة">Treasury</span>
+        </div>
+        <div class="p-5">
+          <div class="text-[11.5px] uppercase tracking-widest text-knx-gray-600">02 Apr 2026 · 2 min</div>
+          <h3 class="mt-2 font-display font-semibold text-[19px] leading-snug i18n" data-en="Q1 2026 sponsorship register published" data-ar="نشر سجل الرعايات للربع الأول 2026">Q1 2026 sponsorship register published</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-28 bg-knx-gray-50 relative">
+  <div class="absolute inset-0 grid-pattern opacity-50 pointer-events-none"></div>
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-5 reveal">
+        <div class="eyebrow"><span class="dot"></span><span class="i18n" data-en="Apply / contact" data-ar="تقديم / تواصل">Apply / contact</span></div>
+        <h2 class="mt-3 font-display font-bold text-4xl md:text-5xl leading-[1.05] i18n" data-en="Start your application." data-ar="ابدأ تقديم طلبك.">Start your application.</h2>
+        <p class="mt-5 text-[16px] text-knx-gray-600 leading-relaxed i18n" data-en="Most applications are decided in 9 working days. We'll get back to you on the email below — usually a 25-minute call with a sitting member." data-ar="تُحسم أغلب الطلبات في 9 أيام عمل. سنتواصل معك على البريد أدناه — غالباً مكالمة 25 دقيقة مع أحد الأعضاء.">Most applications are decided in 9 working days. We'll get back to you on the email below — usually a 25-minute call with a sitting member.</p>
+        <div class="mt-8 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-white border border-knx-gray-200 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0060A8" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></div>
+            <div><div class="text-[12px] uppercase tracking-widest text-knx-gray-600 i18n" data-en="Membership office" data-ar="مكتب العضوية">Membership office</div><div class="font-medium font-mono text-[14.5px]">membership@knxjordan.org</div></div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-white border border-knx-gray-200 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#329C32" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="text-[12px] uppercase tracking-widest text-knx-gray-600 i18n" data-en="Secretariat" data-ar="الأمانة العامة">Secretariat</div><div class="font-medium text-[14.5px] i18n" data-en="7th Circle, Zahran St., Amman 11181" data-ar="الدوار السابع، شارع زهران، عمّان 11181">7th Circle, Zahran St., Amman 11181</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-7 reveal">
+        <form id="apply-form" class="glass rounded-2xl p-6 sm:p-8">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="text-[12px] font-semibold uppercase tracking-wider text-knx-gray-600 i18n" data-en="Full name" data-ar="الاسم الكامل">Full name</label><input name="full_name" required class="field mt-2"/></div>
+            <div><label class="text-[12px] font-semibold uppercase tracking-wider text-knx-gray-600 i18n" data-en="Work email" data-ar="البريد المهني">Work email</label><input name="email" required class="field mt-2" type="email"/></div>
+            <div><label class="text-[12px] font-semibold uppercase tracking-wider text-knx-gray-600 i18n" data-en="Country / city" data-ar="البلد / المدينة">Country / city</label><input name="location" class="field mt-2"/></div>
+            <div><label class="text-[12px] font-semibold uppercase tracking-wider text-knx-gray-600 i18n" data-en="Tier" data-ar="الفئة">Tier</label>
+              <select name="tier" class="field mt-2"><option>Apprentice</option><option>Practitioner</option><option selected>Professional</option><option>Tutor</option></select>
+            </div>
+            <div class="sm:col-span-2"><label class="text-[12px] font-semibold uppercase tracking-wider text-knx-gray-600 i18n" data-en="Briefly describe your KNX experience" data-ar="صف خبرتك مع KNX باختصار">Briefly describe your KNX experience</label><textarea name="experience" class="field mt-2" rows="4"></textarea></div>
+          </div>
+          <div id="apply-status" class="mt-4 text-[13px] hidden"></div>
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <div class="text-[12px] text-knx-gray-600 i18n" data-en="Average response time: 9 working days" data-ar="متوسط زمن الردّ: 9 أيام عمل">Average response time: 9 working days</div>
+            <button type="submit" id="apply-submit" class="btn btn-primary"><span class="i18n" data-en="Submit application" data-ar="إرسال الطلب">Submit application</span><svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-white pt-20 pb-10" style="background:#0B0E12;">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div>
+        <div class="flex items-center gap-3">
+          <img src="assets/knx-logo.png" alt="KNX" class="h-8 w-auto" />
+          <span class="font-display font-bold text-[18px] text-white/70 i18n" data-en="/ Jordan Club" data-ar="/ نادي الأردن">/ Jordan Club</span>
+        </div>
+        <p class="mt-4 text-[14px] text-white/65 max-w-sm leading-relaxed i18n" data-en="Independent. Member-led. Vendor-neutral." data-ar="مستقلّون. يقودنا أعضاؤنا. محايدون تجاه المورّدين.">Independent. Member-led. Vendor-neutral.</p>
+      </div>
+      <div><div class="text-[11.5px] uppercase tracking-widest text-white/50 mb-4 i18n" data-en="Society" data-ar="الجمعية">Society</div>
+        <ul class="space-y-2 text-[14px] text-white/80"><li><a href="#about" class="i18n" data-en="About" data-ar="من نحن">About</a></li><li><a class="i18n" data-en="Bylaws" data-ar="النظام">Bylaws</a></li><li><a class="i18n" data-en="Board" data-ar="المجلس">Board</a></li></ul>
+      </div>
+      <div><div class="text-[11.5px] uppercase tracking-widest text-white/50 mb-4 i18n" data-en="Members" data-ar="الأعضاء">Members</div>
+        <ul class="space-y-2 text-[14px] text-white/80"><li><a href="#directory" class="i18n" data-en="Directory" data-ar="الدليل">Directory</a></li><li><a href="#events" class="i18n" data-en="Events" data-ar="الفعاليات">Events</a></li><li><a href="admin.html" class="i18n" data-en="Member portal" data-ar="بوابة الأعضاء">Member portal</a></li></ul>
+      </div>
+      <div><div class="text-[11.5px] uppercase tracking-widest text-white/50 mb-4 i18n" data-en="Contact" data-ar="تواصل">Contact</div>
+        <ul class="space-y-2 text-[14px] text-white/80"><li class="font-mono">membership@knxjordan.org</li><li class="i18n" data-en="Amman · Jordan" data-ar="عمّان · الأردن">Amman · Jordan</li></ul>
+      </div>
+    </div>
+    <div class="pt-6 border-t border-white/10 text-[12px] text-white/55 i18n" data-en="© 2026 KNX Jordan Club · Registered non-profit · Reg. JO-2014/318" data-ar="© 2026 نادي KNX الأردن · جمعية غير ربحية مسجّلة · سجل JO-2014/318">© 2026 KNX Jordan Club · Registered non-profit · Reg. JO-2014/318</div>
+  </div>
+</footer>
+
+<!-- ============ TWEAKS PANEL ============ -->
+<button class="twk-fab" id="twk-fab" title="Tweaks">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h11M4 12h7M4 18h11"/><circle cx="18" cy="6" r="2"/><circle cx="14" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+</button>
+<div class="twk" id="twk">
+  <div class="twk-h">
+    <b>Tweaks</b>
+    <button class="twk-x" id="twk-close">✕</button>
+  </div>
+  <div class="twk-body">
+    <div class="twk-sec">Theme</div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Mode</span></div>
+      <div class="twk-seg" data-tweak="theme">
+        <button data-v="light">☀ Light</button>
+        <button data-v="dark">☾ Dark</button>
+      </div>
+    </div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Language</span></div>
+      <div class="twk-seg" data-tweak="lang">
+        <button data-v="en">EN</button>
+        <button data-v="ar">العربية</button>
+      </div>
+    </div>
+
+    <div class="twk-sec">Vibe</div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Visual identity</span><small id="vibe-hint">institutional</small></div>
+      <div class="twk-seg" data-tweak="vibe">
+        <button data-v="institutional">Institutional</button>
+        <button data-v="editorial">Editorial</button>
+        <button data-v="technical">Technical</button>
+      </div>
+    </div>
+
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Density</span><small id="density-hint">regular</small></div>
+      <div class="twk-seg" data-tweak="density">
+        <button data-v="compact">Compact</button>
+        <button data-v="regular">Regular</button>
+        <button data-v="airy">Airy</button>
+      </div>
+    </div>
+
+    <div class="twk-sec">Atmosphere</div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Background motion</span><small id="motion-hint">1.0×</small></div>
+      <input type="range" class="twk-slider" id="motion" min="0" max="2" step="0.1" value="1" />
+    </div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Grain</span><small id="grain-hint">subtle</small></div>
+      <input type="range" class="twk-slider" id="grain" min="0" max="0.12" step="0.01" value="0.04" />
+    </div>
+
+    <div class="twk-sec">Pointer</div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Cursor</span></div>
+      <div class="twk-seg" data-tweak="cursor">
+        <button data-v="default">Default</button>
+        <button data-v="dot">● Dot</button>
+      </div>
+    </div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Color spotlight</span></div>
+      <div class="twk-seg" data-tweak="spotlight">
+        <button data-v="true">On</button>
+        <button data-v="false">Off</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* === Tweaks defaults === */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "dark",
+  "lang": "en",
+  "vibe": "institutional",
+  "density": "regular",
+  "motion": 0.9,
+  "grain": 0.04,
+  "spotlight": true,
+  "cursor": "default"
+}/*EDITMODE-END*/;
+
+/* === Apply tweaks to DOM === */
+function applyTweaks(t) {
+  document.documentElement.setAttribute('data-theme', t.theme);
+  document.body.setAttribute('data-lang', t.lang);
+  document.documentElement.setAttribute('dir', t.lang === 'ar' ? 'rtl' : 'ltr');
+  document.body.setAttribute('data-vibe', t.vibe);
+  document.body.setAttribute('data-density', t.density);
+  document.documentElement.style.setProperty('--motion', t.motion);
+  document.documentElement.style.setProperty('--grain', t.grain);
+
+  // Cursor + spotlight FX
+  document.body.classList.toggle('cursor-dot', t.cursor === 'dot');
+  document.body.classList.toggle('no-cursor-fx', !t.spotlight);
+
+  // Apply i18n strings
+  document.querySelectorAll('.i18n').forEach(el => {
+    const html = el.getAttribute('data-' + t.lang + '-html');
+    const text = el.getAttribute('data-' + t.lang);
+    if (html) el.innerHTML = html;
+    else if (text) el.textContent = text;
+  });
+
+  // Update segment buttons
+  document.querySelectorAll('.twk-seg').forEach(seg => {
+    const key = seg.dataset.tweak;
+    seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === String(t[key])));
+  });
+
+  // Update hint labels
+  document.getElementById('vibe-hint').textContent = t.vibe;
+  document.getElementById('density-hint').textContent = t.density;
+  document.getElementById('motion-hint').textContent = (+t.motion).toFixed(1) + '×';
+  document.getElementById('grain-hint').textContent = t.grain < 0.02 ? 'off' : t.grain < 0.06 ? 'subtle' : t.grain < 0.10 ? 'visible' : 'heavy';
+  document.getElementById('motion').value = t.motion;
+  document.getElementById('grain').value = t.grain;
+}
+
+const tweaks = { ...TWEAK_DEFAULTS };
+applyTweaks(tweaks);
+
+function setTweak(key, val) {
+  tweaks[key] = val;
+  applyTweaks(tweaks);
+  try { window.parent.postMessage({type:'__edit_mode_set_keys', edits: { [key]: val }}, '*'); } catch(e){}
+}
+
+document.querySelectorAll('.twk-seg').forEach(seg => {
+  seg.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => {
+      let v = b.dataset.v;
+      if (seg.dataset.tweak === 'motion' || seg.dataset.tweak === 'grain') v = +v;
+      else if (v === 'true') v = true;
+      else if (v === 'false') v = false;
+      setTweak(seg.dataset.tweak, v);
+    });
+  });
+});
+document.getElementById('motion').addEventListener('input', e => setTweak('motion', +e.target.value));
+document.getElementById('grain').addEventListener('input', e => setTweak('grain', +e.target.value));
+
+/* Panel show/hide */
+const panel = document.getElementById('twk');
+const fab = document.getElementById('twk-fab');
+let panelOpen = false;
+function setPanelOpen(open) {
+  panelOpen = open;
+  panel.classList.toggle('open', open);
+  fab.style.display = open ? 'none' : 'flex';
+}
+fab.addEventListener('click', () => setPanelOpen(true));
+document.getElementById('twk-close').addEventListener('click', () => {
+  setPanelOpen(false);
+  try { window.parent.postMessage({type:'__edit_mode_dismissed'}, '*'); } catch(e){}
+});
+
+/* Host protocol */
+window.addEventListener('message', (e) => {
+  if (!e.data || !e.data.type) return;
+  if (e.data.type === '__activate_edit_mode') setPanelOpen(true);
+  if (e.data.type === '__deactivate_edit_mode') setPanelOpen(false);
+});
+try { window.parent.postMessage({type:'__edit_mode_available'}, '*'); } catch(e){}
+
+/* === Counter animation === */
+function animateCount(el, target, dur=1400) {
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.floor(target * eased).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = target.toLocaleString();
+  }
+  requestAnimationFrame(tick);
+}
+const counterIO = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting && !en.target.dataset.done) {
+      en.target.dataset.done = '1';
+      animateCount(en.target, +en.target.dataset.count);
+    }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('.counter').forEach(el => counterIO.observe(el));
+
+/* === Reveal on scroll === */
+const io = new IntersectionObserver((entries) => entries.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* === Global mouse-follow color spotlight + custom dot cursor === */
+(function(){
+  const spot = document.getElementById('cursor-spotlight');
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let tx = window.innerWidth/2, ty = window.innerHeight/2;
+  let dx = tx, dy = ty, rx = tx, ry = ty;
+  let raf = null;
+  function loop(){
+    // dot snaps fast, ring trails softly
+    dx += (tx - dx) * 0.42;
+    dy += (ty - dy) * 0.42;
+    rx += (tx - rx) * 0.18;
+    ry += (ty - ry) * 0.18;
+    dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%, -50%)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    spot.style.setProperty('--cx', tx + 'px');
+    spot.style.setProperty('--cy', ty + 'px');
+    // Far-edge spotlight: place at the OPPOSITE corner of the cursor
+    spot.style.setProperty('--fx', (window.innerWidth - tx) + 'px');
+    spot.style.setProperty('--fy', (window.innerHeight - ty) + 'px');
+    raf = requestAnimationFrame(loop);
+  }
+  document.addEventListener('mousemove', (e) => {
+    tx = e.clientX; ty = e.clientY;
+    if (!raf) raf = requestAnimationFrame(loop);
+  }, { passive: true });
+  // hover state on interactive targets
+  const hoverSel = 'a, button, input, select, textarea, [role="button"], .lift, .cred-card';
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest && e.target.closest(hoverSel)) document.body.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest && e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover');
+  });
+  document.addEventListener('mouseleave', () => {
+    spot.style.opacity = '0';
+    dot.style.opacity = '0';
+    ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    spot.style.opacity = '';
+    dot.style.opacity = '';
+    ring.style.opacity = '';
+  });
+  loop();
+})();
+
+/* === Credential card: mouse-interactive 3D tilt + holographic shine === */
+(function(){
+  const card = document.getElementById('cred-card');
+  if (!card) return;
+  const wrap = document.getElementById('cred-wrap');
+  const MAX_TILT = 6; // degrees
+  let raf = null;
+  function onMove(e){
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left);
+    const y = (e.clientY - r.top);
+    const px = x / r.width;
+    const py = y / r.height;
+    const ry = (px - 0.5) * (MAX_TILT * 2);
+    const rx = -((py - 0.5) * (MAX_TILT * 2));
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      card.style.setProperty('--mx', x + 'px');
+      card.style.setProperty('--my', y + 'px');
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+  }
+  function onLeave(){
+    if (raf) cancelAnimationFrame(raf);
+    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    card.style.setProperty('--mx', '50%');
+    card.style.setProperty('--my', '50%');
+  }
+  wrap.addEventListener('mousemove', onMove);
+  wrap.addEventListener('mouseleave', onLeave);
+})();
+
+/* === Circuit canvas (stronger pulses) === */
+(function() {
+  const canvas = document.getElementById('circuit');
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr, nodes, edges, t = 0;
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = canvas.parentElement.getBoundingClientRect();
+    w = r.width; h = r.height;
+    canvas.width = w*dpr; canvas.height = h*dpr;
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    layout();
+  }
+  function layout() {
+    nodes = [];
+    const cols = Math.max(8, Math.round(w/90));
+    const rows = Math.max(5, Math.round(h/90));
+    const sx = w/cols, sy = h/rows;
+    for (let r=0; r<=rows; r++) for (let c=0; c<=cols; c++) {
+      nodes.push({ x: c*sx + (Math.random()-0.5)*sx*0.4, y: r*sy + (Math.random()-0.5)*sy*0.4, on: Math.random()<0.22, color: Math.random()<0.5 ? '#329C32' : '#0060A8' });
+    }
+    edges = [];
+    for (let i=0; i<nodes.length; i++) for (let j=i+1; j<nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+      if (dx*dx + dy*dy < 130*130 && Math.random() < 0.32) edges.push({a:i, b:j, pulse: Math.random()<0.12 ? Math.random() : -1});
+    }
+  }
+  function draw() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const motion = +getComputedStyle(document.documentElement).getPropertyValue('--motion') || 1;
+    ctx.clearRect(0,0,w,h);
+    ctx.lineWidth = 1;
+    for (const e of edges) {
+      const a = nodes[e.a], b = nodes[e.b];
+      ctx.strokeStyle = dark ? 'rgba(255,255,255,0.08)' : 'rgba(160,160,160,0.20)';
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      if (e.pulse >= 0) {
+        e.pulse += 0.008 * motion;
+        if (e.pulse > 1) e.pulse = -Math.random()*2;
+        if (e.pulse >= 0 && e.pulse <= 1) {
+          const px = a.x + (b.x-a.x)*e.pulse, py = a.y + (b.y-a.y)*e.pulse;
+          ctx.fillStyle = a.color;
+          ctx.beginPath(); ctx.arc(px,py,2.2,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle = a.color + '44';
+          ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill();
+        }
+      } else if (Math.random() < 0.0012 * motion) e.pulse = 0;
+    }
+    for (const n of nodes) {
+      if (n.on) {
+        const phase = (Math.sin(t*0.0018*motion + n.x*0.01)+1)/2;
+        ctx.fillStyle = n.color + Math.round(50 + phase*100).toString(16).padStart(2,'0');
+        ctx.beginPath(); ctx.arc(n.x,n.y,1.9,0,Math.PI*2); ctx.fill();
+      } else {
+        ctx.fillStyle = dark ? 'rgba(255,255,255,0.16)' : 'rgba(160,160,160,0.40)';
+        ctx.beginPath(); ctx.arc(n.x,n.y,1,0,Math.PI*2); ctx.fill();
+      }
+    }
+    t += 16; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize(); draw();
+})();
+
+/* === Directory — Jordan members === */
+const MEMBERS = [
+  { name:'Marwa Al-Habashneh', name_ar:'مروة الحباشنة', tier:'Tutor', firm:'Royal Smart Homes', city:'Amman', city_ar:'عمّان', specialty:'HVAC · Multi-zone', specialty_ar:'تكييف · مناطق متعدّدة', since:2019, color:'#0060A8' },
+  { name:'Khalid Al-Tarawneh', name_ar:'خالد الطراونة', tier:'Professional', firm:'Helios Integrations · Amman', city:'Amman', city_ar:'عمّان', specialty:'IP-secure commissioning', specialty_ar:'تسليم IP الآمن', since:2017, color:'#329C32' },
+  { name:'Lina Khoury', name_ar:'لينا خوري', tier:'Professional', firm:'Aqaba Smart Buildings', city:'Aqaba', city_ar:'العقبة', specialty:'Hospitality · Lighting', specialty_ar:'الفنادق · الإضاءة', since:2020, color:'#329C32' },
+  { name:'Hisham Bani-Hani', name_ar:'هشام بني هاني', tier:'Fellow', firm:'Independent · Board chair', city:'Irbid', city_ar:'إربد', specialty:'Bylaws · Examination', specialty_ar:'النظام · الامتحانات', since:2014, color:'#0060A8' },
+  { name:'Dana Saraireh', name_ar:'دانا الصرايرة', tier:'Practitioner', firm:'Cobalt Labs MENA', city:'Amman', city_ar:'عمّان', specialty:'Residential retrofit', specialty_ar:'ترميم سكني', since:2023, color:'#329C32' },
+  { name:'Omar Al-Masri', name_ar:'عمر المصري', tier:'Professional', firm:'Petra Engineering', city:'Madaba', city_ar:'مأدبا', specialty:'Façade integration', specialty_ar:'دمج الواجهات', since:2018, color:'#0060A8' },
+];
+function initials(n){ return n.split(' ').map(s=>s[0]).slice(0,2).join(''); }
+function tierBadge(t) {
+  const m = { 'Practitioner':{c:'#329C32',bg:'#EAF6EA'}, 'Professional':{c:'#0060A8',bg:'#E5EFF7'}, 'Tutor':{c:'#247024',bg:'#CFEACF'}, 'Fellow':{c:'#004A82',bg:'#BFD7EA'} };
+  return m[t] || { c:'#5C5C5C', bg:'#F4F4F4' };
+}
+function renderDir() {
+  const lang = document.body.getAttribute('data-lang');
+  document.getElementById('directory-grid').innerHTML = MEMBERS.map(m => {
+    const b = tierBadge(m.tier);
+    const name = lang === 'ar' ? m.name_ar : m.name;
+    const city = lang === 'ar' ? m.city_ar : m.city;
+    const sp = lang === 'ar' ? m.specialty_ar : m.specialty;
+    return `<article class="rounded-2xl bg-white border border-knx-gray-200 p-5 lift">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full text-white font-display font-semibold flex items-center justify-center" style="background:${m.color}">${initials(m.name)}</div>
+          <div><div class="font-display font-semibold text-[15.5px]">${name}</div><div class="text-[12.5px] text-knx-gray-600">${m.firm}</div></div>
+        </div>
+        <span class="text-[10.5px] font-semibold uppercase tracking-wider px-2 py-1 rounded" style="color:${b.c};background:${b.bg}">${m.tier}</span>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3 text-[12.5px]">
+        <div><div class="text-knx-gray-600 text-[10.5px] uppercase tracking-wider">${lang==='ar'?'التخصص':'Specialty'}</div><div class="font-medium mt-0.5">${sp}</div></div>
+        <div><div class="text-knx-gray-600 text-[10.5px] uppercase tracking-wider">${lang==='ar'?'المدينة':'Based in'}</div><div class="font-medium mt-0.5">${city}</div></div>
+        <div><div class="text-knx-gray-600 text-[10.5px] uppercase tracking-wider">${lang==='ar'?'منذ':'Since'}</div><div class="font-medium mt-0.5">${m.since}</div></div>
+      </div>
+    </article>`;
+  }).join('');
+}
+renderDir();
+new MutationObserver(renderDir).observe(document.body, { attributes:true, attributeFilter:['data-lang'] });
+
+/* Hydrate directory from Neon if /api/members is available */
+fetch('/api/members').then(r => r.ok ? r.json() : null).then(rows => {
+  if (!Array.isArray(rows) || rows.length === 0) return;
+  MEMBERS.length = 0;
+  rows.forEach(r => MEMBERS.push(r));
+  renderDir();
+}).catch(() => {});
+
+/* Directory search filter */
+(function(){
+  const input = document.getElementById('dir-search');
+  if (!input) return;
+  const grid = document.getElementById('directory-grid');
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    [...grid.children].forEach(card => {
+      card.style.display = !q || card.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+})();
+
+/* === Interactive hero sparkline (12-month members joined) === */
+(function() {
+  const svg = document.getElementById('hero-spark');
+  const readout = document.getElementById('spark-readout');
+  if (!svg) return;
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const months_ar = ['ينا','فبر','مار','أبر','ماي','يون','يول','أغس','سبت','أكت','نوف','ديس'];
+  const data = [3,5,4,7,6,9,8,12,10,14,11,18];
+  const W=480, H=64, pad=4;
+  const max = Math.max(...data), min = 0;
+  const xs = data.map((_,i)=> pad + i*(W-pad*2)/(data.length-1));
+  const ys = data.map(v=> H - 6 - (v-min)/(max-min)*(H-12));
+  const linePath = xs.map((x,i)=> (i?'L':'M')+x.toFixed(1)+','+ys[i].toFixed(1)).join(' ');
+  const areaPath = linePath + ` L${xs[xs.length-1]},${H} L${xs[0]},${H} Z`;
+  svg.innerHTML = `
+    <defs><linearGradient id="hsg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#329C32" stop-opacity=".35"/><stop offset="1" stop-color="#0060A8" stop-opacity="0"/></linearGradient></defs>
+    <path d="${areaPath}" fill="url(#hsg)"/>
+    <path d="${linePath}" fill="none" stroke="url(#hsg-stroke)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <linearGradient id="hsg-stroke" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#329C32"/><stop offset="1" stop-color="#0060A8"/></linearGradient>
+    ${data.map((v,i)=>`<circle data-i="${i}" cx="${xs[i].toFixed(1)}" cy="${ys[i].toFixed(1)}" r="2" fill="${i<6?'#329C32':'#0060A8'}" opacity="0" style="transition:opacity .15s, r .15s"/>`).join('')}
+    <line id="hsg-cursor" x1="-10" x2="-10" y1="0" y2="${H}" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="2 3"/>
+  `;
+  function update(idx) {
+    const lang = document.body.getAttribute('data-lang');
+    const mlist = lang==='ar'? months_ar: months;
+    if (idx < 0) { readout.textContent = lang==='ar'? 'تصفّح الأشهر':'hover months'; svg.querySelector('#hsg-cursor').setAttribute('x1','-10'); svg.querySelector('#hsg-cursor').setAttribute('x2','-10'); svg.querySelectorAll('circle').forEach(c=>{c.setAttribute('opacity','0'); c.setAttribute('r','2');}); return; }
+    readout.textContent = `${mlist[idx]} · +${data[idx]} ${lang==='ar'?'عضو':'joined'}`;
+    svg.querySelector('#hsg-cursor').setAttribute('x1', xs[idx]); svg.querySelector('#hsg-cursor').setAttribute('x2', xs[idx]);
+    svg.querySelectorAll('circle').forEach((c,i)=>{ c.setAttribute('opacity', i===idx?'1':'0'); c.setAttribute('r', i===idx?'4':'2'); });
+  }
+  svg.addEventListener('mousemove', (e)=>{
+    const rect = svg.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * W;
+    let nearest = 0, nd = 1e9;
+    xs.forEach((xx,i)=>{ const d = Math.abs(xx - x); if (d < nd) { nd = d; nearest = i; } });
+    update(nearest);
+  });
+  svg.addEventListener('mouseleave', ()=> update(-1));
+  update(-1);
+})();
+
+/* === Hero parallax: copy follows mouse subtly, credential card tilts === */
+(function() {
+  const hero = document.querySelector('.hero');
+  const copy = document.getElementById('hero-copy');
+  const card = document.querySelector('.hero .lg\\:col-span-5 .relative .glass');
+  if (!hero) return;
+  const blobs = hero.querySelectorAll('.blob');
+  hero.addEventListener('mousemove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const dx = (e.clientX - r.left) / r.width - 0.5;
+    const dy = (e.clientY - r.top) / r.height - 0.5;
+    blobs.forEach((b,i) => { const f = (i+1) * 12; b.style.transform = `translate(${dx*f}px, ${dy*f}px)`; });
+    if (copy) copy.style.transform = `translate3d(${dx*-6}px, ${dy*-3}px, 0)`;
+    if (card) card.style.transform = `perspective(1000px) rotateY(${dx*4}deg) rotateX(${dy*-4}deg) translate3d(${dx*-8}px, ${dy*-6}px, 0)`;
+  });
+  hero.addEventListener('mouseleave', () => {
+    blobs.forEach(b => b.style.transform = '');
+    if (copy) copy.style.transform = '';
+    if (card) card.style.transform = '';
+  });
+})();
+
+/* === Apply form → /api/apply (Neon-backed) === */
+(function(){
+  const form = document.getElementById('apply-form');
+  const status = document.getElementById('apply-status');
+  const btn = document.getElementById('apply-submit');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const lang = document.body.getAttribute('data-lang');
+    const data = Object.fromEntries(new FormData(form).entries());
+    status.classList.remove('hidden');
+    status.style.color = 'var(--muted)';
+    status.textContent = lang === 'ar' ? 'جارٍ الإرسال…' : 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/apply', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || 'Request failed');
+      status.style.color = '#329C32';
+      status.textContent = lang === 'ar'
+        ? '✓ تم استلام طلبك. سنتواصل معك قريباً.'
+        : '✓ Application received. We\'ll be in touch soon.';
+      form.reset();
+    } catch (err) {
+      status.style.color = '#B23A3A';
+      status.textContent = (lang === 'ar' ? 'تعذّر الإرسال: ' : 'Could not submit: ') + err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+
+/* === Member-card tilt on hover === */
+document.addEventListener('mousemove', (e) => {
+  const card = e.target.closest('#directory-grid > article');
+  if (!card) return;
+  const r = card.getBoundingClientRect();
+  const dx = (e.clientX - r.left)/r.width - 0.5;
+  const dy = (e.clientY - r.top)/r.height - 0.5;
+  card.style.transform = `translateY(-3px) perspective(800px) rotateY(${dx*4}deg) rotateX(${dy*-4}deg)`;
+});
+document.addEventListener('mouseout', (e) => {
+  if (e.target && e.target.matches && e.target.matches('#directory-grid > article')) e.target.style.transform = '';
+});
+</script>
+</body>
+</html>
