@@ -377,16 +377,60 @@
   .stat-spark { margin-top:10px; height:24px; }
   .stat-trend { position:absolute; top:14px; right:14px; font-size:11px; font-weight:600; color:var(--green); display:inline-flex; align-items:center; gap:4px; padding:3px 7px; border-radius:999px; background: rgba(50,156,50,.10); }
 
-  /* Reveal on scroll */
-  .reveal { opacity:0; transform: translateY(22px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); will-change: transform, opacity; }
-  .reveal.in { opacity:1; transform: none; }
-  .reveal-left { transform: translateX(-28px); }
-  .reveal-right { transform: translateX(28px); }
-  .reveal-scale { transform: scale(.94); }
-  .reveal-blur { filter: blur(8px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), filter .8s ease; }
-  .reveal-blur.in { filter: blur(0); }
+  /* Reveal on scroll — modern, cascading, GPU-friendly
+     Default: subtle fade-up with a tiny scale pop and micro-blur,
+     tuned with an "ease-out-expo"-style curve for a confident landing. */
+  :root {
+    --rv-dur: 900ms;
+    --rv-ease: cubic-bezier(.16,.84,.28,1);
+    --rv-step: 70ms;            /* base step between cascaded children */
+    --rv-y: 28px;
+    --rv-x: 36px;
+    --rv-scale: .965;
+    --rv-blur: 10px;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, var(--rv-y), 0) scale(var(--rv-scale));
+    filter: blur(var(--rv-blur));
+    transition:
+      opacity var(--rv-dur) var(--rv-ease),
+      transform var(--rv-dur) var(--rv-ease),
+      filter calc(var(--rv-dur) * .85) var(--rv-ease);
+    transition-delay: calc(var(--i, 0) * var(--rv-step));
+    will-change: transform, opacity, filter;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+  /* After landing, drop will-change so layers don't linger */
+  .reveal.in.settled { will-change: auto; }
+
+  /* Variants — combine with .reveal */
+  .reveal-left   { transform: translate3d(calc(var(--rv-x) * -1), 0, 0) scale(var(--rv-scale)); }
+  .reveal-right  { transform: translate3d(var(--rv-x), 0, 0) scale(var(--rv-scale)); }
+  .reveal-up     { transform: translate3d(0, calc(var(--rv-y) * 1.4), 0) scale(var(--rv-scale)); }
+  .reveal-scale  { transform: translate3d(0, 12px, 0) scale(.92); }
+  .reveal-blur   { filter: blur(14px); }
+  .reveal-tilt   { transform: translate3d(0, var(--rv-y), 0) rotateX(8deg) scale(var(--rv-scale)); transform-origin: 50% 100%; }
+  .reveal-left.in, .reveal-right.in, .reveal-up.in, .reveal-scale.in, .reveal-tilt.in { transform: translate3d(0, 0, 0) scale(1) rotateX(0); }
+
+  /* Section header micro-cascade: eyebrow → headline → paragraph */
+  .reveal-section > .eyebrow         { --i: 0; }
+  .reveal-section > h1, .reveal-section > h2 { --i: 1; }
+  .reveal-section > p                { --i: 2; }
+  .reveal-section > .actions, .reveal-section > .row { --i: 3; }
+
   @media (prefers-reduced-motion: reduce) {
-    .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur { opacity:1 !important; transform:none !important; filter:none !important; transition:none !important; }
+    .reveal,
+    .reveal-left, .reveal-right, .reveal-up, .reveal-scale, .reveal-blur, .reveal-tilt {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
   }
 
   /* Footer */
@@ -1124,32 +1168,88 @@ const counterIO = new IntersectionObserver((entries) => {
 }, { threshold: 0.4 });
 document.querySelectorAll('.counter').forEach(el => counterIO.observe(el));
 
-/* === Reveal on scroll === */
-const io = new IntersectionObserver((entries) => entries.forEach(e => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))), { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+/* === Reveal on scroll — modern, cascading, GPU-friendly === */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* Auto-tag common content blocks for scroll reveal so every section animates in */
+const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('in');
+    io.unobserve(el);
+    /* drop will-change once the transition settles so we don't keep
+       extra compositor layers around */
+    const dur = parseFloat(getComputedStyle(el).transitionDuration) * 1000 || 900;
+    const delay = parseFloat(getComputedStyle(el).transitionDelay) * 1000 || 0;
+    setTimeout(() => el.classList.add('settled'), dur + delay + 80);
+  });
+}, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' }) : null;
+
+/* Auto-tag common content blocks so every section animates in cohesively.
+   Each entry: selector + base variant + cascade group ("stagger" walks
+   children in order, "reset" restarts the index per parent). */
 (function autoReveal(){
+  if (reduceMotion) return;
+
   const groups = [
-    { sel: '#about .grid.sm\\:grid-cols-2 > div', variant: 'reveal-scale', stagger: true },
-    { sel: '#directory-grid > *', variant: 'reveal', stagger: true },
-    { sel: '#events article', variant: 'reveal', stagger: true },
-    { sel: '#news article', variant: 'reveal-scale', stagger: true },
-    { sel: '#contact form', variant: 'reveal-right' },
-    { sel: '#stat-strip', variant: 'reveal-blur' },
-    { sel: '.hero-marquee', variant: 'reveal' },
-    { sel: '.site-footer > div > div > div', variant: 'reveal', stagger: true },
+    /* Hero — staggered headline → paragraph → CTAs */
+    { sel: '#hero-copy > *',                      variant: 'reveal-up',    cascade: 'serial', step: 1 },
+    { sel: '#cred-wrap',                          variant: 'reveal-right' },
+    { sel: '#stat-strip',                         variant: 'reveal-blur' },
+    { sel: '#stat-strip [data-count]',            variant: 'reveal',       cascade: 'serial', step: 1, parent: '#stat-strip' },
+    { sel: '.hero-marquee',                       variant: 'reveal' },
+
+    /* About */
+    { sel: '#about > .max-w-7xl > .grid > div:first-child > *',  variant: 'reveal-up',   cascade: 'serial', step: 1 },
+    { sel: '#about .grid.sm\\:grid-cols-2 > div',                variant: 'reveal-scale', cascade: 'grid',  step: 1 },
+
+    /* Directory */
+    { sel: '#directory > .max-w-7xl > .flex > *',                variant: 'reveal-up',   cascade: 'serial', step: 1 },
+    { sel: '#directory-grid > *',                                variant: 'reveal',      cascade: 'grid',  step: 1 },
+
+    /* Events */
+    { sel: '#events > .relative > .mb-12 > *',                   variant: 'reveal-up',   cascade: 'serial', step: 1 },
+    { sel: '#events article',                                    variant: 'reveal-tilt', cascade: 'grid',  step: 1 },
+
+    /* News */
+    { sel: '#news > .max-w-7xl > .mb-12 > *',                    variant: 'reveal-up',   cascade: 'serial', step: 1 },
+    { sel: '#news article',                                      variant: 'reveal-scale', cascade: 'grid',  step: 1 },
+
+    /* Contact */
+    { sel: '#contact > .relative > .grid > div:first-child > *', variant: 'reveal-up',   cascade: 'serial', step: 1 },
+    { sel: '#contact form',                                      variant: 'reveal-right' },
+
+    /* Footer */
+    { sel: '.site-footer > div > div:first-child > div',         variant: 'reveal-up',   cascade: 'grid',  step: 1 },
   ];
+
   groups.forEach(g => {
     const els = document.querySelectorAll(g.sel);
+    if (!els.length) return;
     els.forEach((el, i) => {
       el.classList.add('reveal');
       if (g.variant && g.variant !== 'reveal') el.classList.add(g.variant);
-      if (g.stagger) el.style.transitionDelay = (0.06 * (i % 6)) + 's';
+      if (g.cascade) {
+        /* cap the index so very long lists don't pile up huge delays */
+        const cap = g.cascade === 'grid' ? 8 : 6;
+        el.style.setProperty('--i', String(Math.min(i, cap) * (g.step || 1)));
+      }
     });
+  });
+
+  /* Avoid compounding: if an element marked .reveal contains descendants
+     that are also .reveal, let the descendants handle the animation and
+     drop the wrapper's own reveal classes. */
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (el.querySelector('.reveal')) {
+      el.classList.remove('reveal','reveal-up','reveal-left','reveal-right','reveal-scale','reveal-blur','reveal-tilt');
+    }
   });
 })();
 
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+if (io) {
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
 
 /* === Subtle scroll-driven parallax on hero blobs and grid === */
 (function heroParallax(){
