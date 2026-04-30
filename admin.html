@@ -72,6 +72,27 @@
   html[data-theme="dark"] .nav-toggle .ico[data-show-when="dark"] { display:inline; }
   body[data-lang="en"] .nav-toggle .ico[data-show-when="en"] { display:inline; }
   body[data-lang="ar"] .nav-toggle .ico[data-show-when="ar"] { display:inline; }
+
+  /* Mobile responsive admin */
+  @media (max-width: 640px) {
+    /* 16px inputs on phones so iOS doesn't auto-zoom on focus */
+    .field, .field:focus { font-size: 16px; }
+    /* Tighter chrome */
+    header > div { padding-top: 12px; padding-bottom: 12px; }
+    main.max-w-5xl { padding-top: 24px; padding-bottom: 32px; }
+    .panel { padding: 18px !important; border-radius: 14px; }
+    .panel.p-8 { padding: 22px !important; }
+    /* Dashboard header — stack title and sign-out */
+    #dashboard-view h1.text-3xl { font-size: 24px; }
+    /* Application rows wrap cleanly */
+    .row { padding: 12px 0; }
+    /* Buttons full-width on tiny phones for easier tapping */
+    .btn { padding: 12px 16px; }
+  }
+  @media (max-width: 480px) {
+    #signout-btn { width: 100%; justify-content: center; }
+    #dashboard-view .flex.flex-wrap { flex-direction: column; align-items: stretch; }
+  }
 </style>
 </head>
 <body class="min-h-screen" data-lang="en">

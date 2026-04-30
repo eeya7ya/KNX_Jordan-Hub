@@ -547,9 +547,179 @@
   body[data-lang="ar"] .twk-fab { right:auto; left:20px; }
   .twk-fab:hover { transform: scale(1.08) rotate(15deg); }
 
-  /* Mobile responsive directory */
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 44px !important; }
+  /* === Mobile burger + drawer === */
+  .nav-burger {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid var(--line-2); background: transparent;
+    flex-direction: column; gap: 4px; cursor: pointer; padding: 0;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .nav-burger:hover { background: rgba(0,96,168,0.08); border-color: rgba(0,96,168,0.35); }
+  html[data-theme="dark"] .nav-burger { border-color: rgba(255,255,255,0.14); }
+  html[data-theme="dark"] .nav-burger:hover { background: rgba(127,182,230,0.14); border-color: rgba(127,182,230,0.4); }
+  .nav-burger-bar {
+    display: block; width: 18px; height: 2px; border-radius: 2px;
+    background: var(--ink); transition: transform .25s ease, opacity .2s ease;
+  }
+  body.mobile-nav-open .nav-burger-bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  body.mobile-nav-open .nav-burger-bar:nth-child(2) { opacity: 0; }
+  body.mobile-nav-open .nav-burger-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-nav-backdrop {
+    position: fixed; inset: 0; z-index: 110;
+    background: rgba(7,10,14,0.55); backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+  }
+  body.mobile-nav-open .mobile-nav-backdrop { opacity: 1; pointer-events: auto; }
+
+  .mobile-nav {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 111;
+    width: min(86vw, 340px);
+    background: var(--bg);
+    border-inline-start: 1px solid var(--line-2);
+    box-shadow: -24px 0 60px rgba(0,0,0,0.18);
+    transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    display: flex; flex-direction: column;
+    overscroll-behavior: contain;
+  }
+  [dir="rtl"] .mobile-nav { right: auto; left: 0; transform: translateX(-100%); border-inline-start: 0; border-inline-end: 1px solid var(--line-2); box-shadow: 24px 0 60px rgba(0,0,0,0.18); }
+  body.mobile-nav-open .mobile-nav { transform: translateX(0); }
+  html[data-theme="dark"] .mobile-nav { background: #0E1218; }
+
+  .mobile-nav-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px; border-bottom: 1px solid var(--line);
+  }
+  .mobile-nav-list { display: flex; flex-direction: column; padding: 12px 12px; gap: 4px; flex: 1 1 auto; overflow-y: auto; }
+  .mobile-nav-link {
+    display: flex; align-items: center; padding: 14px 14px;
+    border-radius: 10px; font-size: 16px; font-weight: 600;
+    color: var(--ink); border: 1px solid transparent;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .mobile-nav-link:hover { background: rgba(0,96,168,0.08); border-color: rgba(0,96,168,0.18); }
+  .mobile-nav-link.is-active {
+    background: linear-gradient(135deg, rgba(0,96,168,0.16), rgba(50,156,50,0.12));
+    border-color: rgba(0,96,168,0.32); color: #0060A8;
+  }
+  html[data-theme="dark"] .mobile-nav-link { color: #E2E8F0; }
+  html[data-theme="dark"] .mobile-nav-link:hover { background: rgba(127,182,230,0.14); border-color: rgba(127,182,230,0.30); }
+  html[data-theme="dark"] .mobile-nav-link.is-active { color: #fff; background: linear-gradient(135deg, rgba(0,96,168,0.32), rgba(50,156,50,0.26)); border-color: transparent; }
+  .mobile-nav-foot { padding: 14px 16px 18px; border-top: 1px solid var(--line); }
+
+  /* === Mobile responsive layout === */
+  @media (max-width: 1023px) {
+    /* Tame section padding for tablets/phones */
+    section.py-28 { padding-top: 72px; padding-bottom: 72px; }
+    body[data-density="airy"] section.py-28 { padding-top: 96px; padding-bottom: 96px; }
+    body[data-density="compact"] section.py-28 { padding-top: 56px; padding-bottom: 56px; }
+    /* Hide the floating tweaks panel on small screens */
+    .twk-fab { width: 42px; height: 42px; right: 14px; bottom: 14px; }
+    body[data-lang="ar"] .twk-fab { left: 14px; right: auto; }
+    .twk { right: 12px; left: 12px; bottom: 12px; width: auto; max-height: 70vh; }
+    body[data-lang="ar"] .twk { left: 12px; right: 12px; }
+  }
+
+  @media (max-width: 767px) {
+    /* Hero — softer typographic scale and spacing */
+    .hero { padding-top: 96px !important; }
+    .hero h1 { font-size: 40px !important; line-height: 1.06 !important; }
+    .hero .hero-inner { padding-left: 18px !important; padding-right: 18px !important; }
+    .hero-inner > .grid { gap: 28px !important; }
+    .hero p { font-size: 15.5px !important; }
+    .hero .lg\:mt-20 { margin-top: 0 !important; }
+    /* Credential card on phone */
+    .cred-card { padding: 20px !important; border-radius: 18px; }
+    .cred-card .grid.grid-cols-2 { gap: 8px !important; }
+    .cred-field { padding: 10px 12px !important; }
+    /* Disable the absolutely positioned decorative pills */
+    .cred-pill { display: none !important; }
+    /* Stat strip — stack governorates / renewal vertically, drop dividers */
+    #stat-strip { padding: 18px !important; margin-top: 28px !important; }
+    #stat-strip .grid.md\:grid-cols-12 { gap: 16px !important; }
+    #stat-strip .grid.grid-cols-3 { gap: 10px; }
+    #stat-strip .divide-x > * { padding-inline: 0 !important; }
+    #stat-strip .divide-x { border-color: transparent !important; }
+    #stat-strip .divide-x > * + * { border-inline-start: 1px solid var(--line); padding-inline-start: 14px !important; }
+    #stat-strip .font-display.text-3xl { font-size: 22px !important; }
+    #stat-strip .text-knx-gray-600.text-xl { font-size: 14px !important; }
+
+    /* Hero marquee — slightly smaller */
+    .hero-marquee .marquee-track { font-size: 11.5px !important; gap: 28px !important; }
+
+    /* Section headings */
+    section h2.font-display { font-size: 30px !important; line-height: 1.12 !important; }
+    section h2.font-display.text-5xl { font-size: 30px !important; }
+
+    /* About stat row stays inline but smaller */
+    #about .font-display.text-3xl { font-size: 22px !important; }
+
+    /* Directory — search is full width below the heading */
+    #directory .dir-search-wrap { width: 100%; }
+    #directory #dir-search { width: 100% !important; }
+    #directory > div > .flex { gap: 16px; }
+    #directory-grid { gap: 12px !important; }
+    #directory-grid > article { padding: 16px !important; }
+
+    /* Events — cleaner cards, smaller hero block */
+    #events .h-56 { height: 180px !important; }
+    #events .text-3xl { font-size: 22px !important; }
+    #events .text-\[19px\] { font-size: 16px !important; }
+    #events article { padding: 16px !important; }
+
+    /* News */
+    #news .h-44 { height: 140px !important; }
+    #news .text-\[19px\] { font-size: 16px !important; }
+
+    /* Contact form */
+    #contact form { padding: 20px !important; border-radius: 16px; }
+    #contact form .grid { gap: 12px !important; }
+    /* Inputs at 16px on mobile so iOS doesn't auto-zoom on focus */
+    .field, .field:focus { font-size: 16px !important; }
+
+    /* Footer — tighter columns */
+    .site-footer { padding-top: 56px !important; }
+    .site-footer .grid { gap: 28px !important; }
+
+    /* Reveal animations — gentler distances + faster on mobile */
+    :root {
+      --rv-dur: 700ms;
+      --rv-y: 18px;
+      --rv-x: 22px;
+      --rv-blur: 6px;
+      --rv-step: 50ms;
+    }
+
+    /* Stop the heavy hero blob blur cost on phones — keep colors */
+    .blob { filter: blur(60px); }
+    .blob.b3 { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 36px !important; }
+    .hero p { font-size: 14.5px !important; }
+    .btn { padding: 11px 16px; font-size: 13.5px; }
+    .btn-apply { padding: 8px 12px; font-size: 12.5px; }
+    /* Logo wordmark trims to keep nav from wrapping */
+    header nav .font-display.font-bold { display: none; }
+    /* About card grid down to one column on tiny phones */
+    #about .grid.sm\:grid-cols-2 { grid-template-columns: 1fr !important; }
+    /* Directory grid one column on tiny phones */
+    #directory-grid { grid-template-columns: 1fr !important; }
+    /* Events card grid one column on tiny phones */
+    #events .grid.lg\:grid-cols-3 { grid-template-columns: 1fr !important; }
+    #news .grid.md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+    /* About 'founded · board · non-profit' block — wrap nicely */
+    #about .mt-8.flex { flex-wrap: wrap; gap: 14px !important; }
+    #about .mt-8.flex .w-px { display: none; }
+  }
+
+  /* Touch / coarse pointer — drop the cursor effects entirely */
+  @media (hover: none), (pointer: coarse) {
+    .cursor-spotlight, .cursor-dot-el, .cursor-dot-ring { display: none !important; }
+    body.cursor-dot, body.cursor-dot * { cursor: auto !important; }
   }
 
   /* Vibe presets — 3 expressive visual modes */
@@ -578,10 +748,10 @@
 <!-- ============ NAV ============ -->
 <header id="top" class="fixed top-0 inset-x-0 z-50">
   <div class="max-w-[1700px] mx-auto px-4 sm:px-6 mt-3">
-    <nav class="glass rounded-xl px-4 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6">
-      <a href="#top" class="flex items-end gap-3 leading-none justify-self-start">
-        <img src="assets/knx-logo.png" alt="KNX" class="h-7 w-auto block" />
-        <span class="font-display font-bold text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap leading-none">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
+    <nav class="glass rounded-xl px-3 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-6">
+      <a href="#top" class="flex items-end gap-2 sm:gap-3 leading-none justify-self-start min-w-0">
+        <img src="assets/knx-logo.png" alt="KNX" class="h-6 sm:h-7 w-auto block shrink-0" />
+        <span class="font-display font-bold text-[15px] sm:text-[17px] tracking-tight text-knx-gray-600 whitespace-nowrap leading-none truncate">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
       </a>
       <div class="hidden lg:flex items-center justify-center gap-2 text-[13.5px] font-medium text-knx-gray-800 justify-self-center">
         <a href="#about" data-page="about" class="nav-tab i18n" data-en="About" data-ar="من نحن">About</a>
@@ -590,7 +760,7 @@
         <a href="#news" data-page="news" class="nav-tab i18n" data-en="News" data-ar="الأخبار">News</a>
         <a href="#contact" data-page="contact" class="nav-tab i18n" data-en="Contact" data-ar="تواصل">Contact</a>
       </div>
-      <div class="flex items-center gap-3 justify-self-end">
+      <div class="flex items-center gap-2 sm:gap-3 justify-self-end">
         <div class="nav-tools" role="group" aria-label="Preferences">
           <button id="nav-theme" type="button" class="nav-toggle nav-toggle--bare" aria-label="Toggle theme" title="Toggle theme">
             <span class="nav-toggle-ico" data-show-when="light">☾</span>
@@ -603,14 +773,45 @@
           </button>
         </div>
         <span class="hidden sm:block w-px h-6 bg-[var(--line-2)] opacity-60" aria-hidden="true"></span>
-        <a href="#contact" class="btn-apply">
+        <a href="#contact" class="btn-apply hidden sm:inline-flex">
           <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
           <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
+        <button id="nav-burger" type="button" class="nav-burger lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+          <span class="nav-burger-bar"></span>
+          <span class="nav-burger-bar"></span>
+          <span class="nav-burger-bar"></span>
+        </button>
       </div>
     </nav>
   </div>
 </header>
+
+<!-- Mobile drawer -->
+<div id="mobile-nav-backdrop" class="mobile-nav-backdrop lg:hidden" aria-hidden="true"></div>
+<aside id="mobile-nav" class="mobile-nav lg:hidden" aria-hidden="true">
+  <div class="mobile-nav-head">
+    <div class="flex items-center gap-2">
+      <img src="assets/knx-logo.png" alt="KNX" class="h-6 w-auto" />
+      <span class="font-display font-bold text-[15px] tracking-tight text-knx-gray-600">/ <span class="i18n" data-en="Jordan Club" data-ar="نادي الأردن">Jordan Club</span></span>
+    </div>
+    <button id="mobile-nav-close" type="button" class="nav-toggle" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="mobile-nav-list">
+    <a href="#top" data-page="home" class="mobile-nav-link i18n" data-en="Home" data-ar="الرئيسية">Home</a>
+    <a href="#about" data-page="about" class="mobile-nav-link i18n" data-en="About" data-ar="من نحن">About</a>
+    <a href="#directory" data-page="directory" class="mobile-nav-link i18n" data-en="Directory" data-ar="الدليل">Directory</a>
+    <a href="#events" data-page="events" class="mobile-nav-link i18n" data-en="Events" data-ar="الفعاليات">Events</a>
+    <a href="#news" data-page="news" class="mobile-nav-link i18n" data-en="News" data-ar="الأخبار">News</a>
+    <a href="#contact" data-page="contact" class="mobile-nav-link i18n" data-en="Contact" data-ar="تواصل">Contact</a>
+  </nav>
+  <div class="mobile-nav-foot">
+    <a href="#contact" data-page="contact" class="btn btn-primary w-full justify-center">
+      <span class="i18n" data-en="Apply" data-ar="قدم الآن">Apply</span>
+      <svg class="flip-rtl" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</aside>
 
 <!-- ============ HERO ============ -->
 <section id="home" class="hero pt-28 pb-0" style="font-family: Sora">
@@ -1276,8 +1477,40 @@ if (io) {
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
+/* === Detect coarse pointer (touch) once — used to skip hover-only FX === */
+const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+/* === Mobile nav drawer === */
+(function(){
+  const burger    = document.getElementById('nav-burger');
+  const panel     = document.getElementById('mobile-nav');
+  const backdrop  = document.getElementById('mobile-nav-backdrop');
+  const closeBtn  = document.getElementById('mobile-nav-close');
+  if (!burger || !panel) return;
+  function setOpen(open) {
+    document.body.classList.toggle('mobile-nav-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    panel.setAttribute('aria-hidden', String(!open));
+    backdrop.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burger.addEventListener('click', () => setOpen(!document.body.classList.contains('mobile-nav-open')));
+  closeBtn.addEventListener('click', () => setOpen(false));
+  backdrop.addEventListener('click', () => setOpen(false));
+  // Auto-close when any in-drawer link is clicked
+  panel.addEventListener('click', (e) => {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  // Auto-close on Escape and on resize past the lg breakpoint
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1024 && document.body.classList.contains('mobile-nav-open')) setOpen(false);
+  });
+})();
+
 /* === Global mouse-follow color spotlight + custom dot cursor === */
 (function(){
+  if (isTouch) return; // skip on touch devices entirely
   const spot = document.getElementById('cursor-spotlight');
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
@@ -1669,7 +1902,7 @@ document.addEventListener('mouseout', (e) => {
       sec.style.display = (showAll || sec.id === target) ? '' : 'none';
     });
 
-    document.querySelectorAll('.nav-tab').forEach(a => {
+    document.querySelectorAll('.nav-tab, .mobile-nav-link').forEach(a => {
       a.classList.toggle('is-active', a.getAttribute('data-page') === target);
     });
 
